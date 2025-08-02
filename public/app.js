@@ -42,6 +42,7 @@
       setupD3(sincoData);
       processData();
       updateStatsFromData(sincoData);
+      populateCards();
       setupEventListeners();
     } catch (error) {
       console.error("Failed to load and initialize SINCO data:", error);
@@ -294,8 +295,13 @@
   }
 
   function populateCards(divisionsToRender) {
-    const divisions = divisionsToRender || state.rootNode.children;
+    const divisions = divisionsToRender && divisionsToRender.length ? divisionsToRender : (state.rootNode && state.rootNode.children ? state.rootNode.children : []);
     const fragment = document.createDocumentFragment();
+
+    if (!divisions.length) {
+      DOM.cardsContainer.innerHTML = "";
+      return;
+    }
 
     divisions.forEach((division) => {
       const card = document.createElement("div");
