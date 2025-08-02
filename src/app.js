@@ -110,6 +110,13 @@ import * as d3 from "d3";
     const families = new Set();
     const levels = new Set();
     const locations = new Set();
+    const leaves = state.allNodes.filter((n) => !n.children && !n._children);
+    const leafCountByDivision = new Map();
+    leaves.forEach((leaf) => {
+      const division = leaf.ancestors()[1];
+      if (division) leafCountByDivision.set(division.data.code, (leafCountByDivision.get(division.data.code) || 0) + 1);
+    });
+    state.leafCountByDivision = leafCountByDivision;
     state.allNodes.forEach((n) => {
       const d = n.data || {};
       if (d.jobFamily) families.add(d.jobFamily);
@@ -374,12 +381,13 @@ import * as d3 from "d3";
       const card = document.createElement("div");
       card.className = "division-card";
       card.dataset.code = division.data.code;
+      const count = state.leafCountByDivision?.get(division.data.code) || 0;
       const leafNodes = division.descendants().filter((d) => !d.children && !d._children);
       const totalEmployees = d3.sum(leafNodes, (d) => d.data.employees || 0);
       card.innerHTML = `
               <div class="division-header">
                   <div class="division-title">${division.data.name}</div>
-                  <div class="occupation-count">${leafNodes.length} ocupaciones</div>
+                  <div class="occupation-count">${count.toLocaleString()} ocupaciones</div>
               </div>
               <p><strong>Salario Promedio:</strong> ${division.data.avgSalary?.toLocaleString() || "N/A"} MXN</p>
               <p><strong>Total Empleados:</strong> ${totalEmployees.toLocaleString()}</p>
