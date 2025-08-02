@@ -118,7 +118,10 @@
       const hidden = stats.classList.toggle("hidden");
       toggleStats.setAttribute("aria-expanded", String(!hidden));
       toggleStats.textContent = hidden ? "Mostrar métricas" : "Ocultar métricas";
-    });
+    }); 
+    
+    const resetZoomBtn = document.getElementById("btn-reset-zoom");
+    if (resetZoomBtn) resetZoomBtn.addEventListener("click", resetZoom);
   }
 
   function processData() {
@@ -180,6 +183,12 @@
       .scaleExtent([0.1, 3])
       .on("zoom", (event) => state.d3.g.attr("transform", event.transform));
     state.d3.svg.call(state.d3.zoom);
+  }
+
+  function resetZoom() {
+    const { width, height } = DOM.treeView.getBoundingClientRect();
+    const transform = d3.zoomIdentity.translate(80, 0);
+    state.d3.svg.transition().duration(500).call(state.d3.zoom.transform, transform);
   }
 
   function collapse(d) {
