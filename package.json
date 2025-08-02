@@ -10,7 +10,10 @@
     "lint": "eslint . --ext .js,.html",
     "format": "prettier --write .",
     "check:format": "prettier --check .",
-    "check:links": "npx -y linkinator http://localhost:8000 --silent || true"
+    "check:links": "npx -y linkinator http://localhost:8000 --silent || true",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +26,8 @@
     "eslint-plugin-security": "^3.0.1",
     "http-server": "^14.1.1",
     "linkinator": "^6.1.4",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "vite": "^7.0.6",
+    "vite-plugin-html": "^3.2.2"
   }
 }
