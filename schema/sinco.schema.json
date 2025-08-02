@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://example.com/sinco.schema.json",
-  "title": "SINCO 2019 Data",
+  "title": "SINCO 2019 Data (HR-extended)",
   "type": "object",
   "required": ["name", "code"],
   "properties": {
@@ -10,9 +10,55 @@
     "avgSalary": { "type": ["number", "null"] },
     "formality": { "type": ["number", "null"] },
     "employees": { "type": ["number", "null"] },
+    "roleId": { "type": ["string", "null"] },
+    "jobFamily": { "type": ["string", "null"] },
+    "level": { "type": ["string", "number", "null"] },
+    "competencies": {
+      "type": ["array", "null"],
+      "items": { "type": "string" }
+    },
+    "salaryBand": {
+      "type": ["object", "null"],
+      "properties": {
+        "min": { "type": ["number", "null"] },
+        "mid": { "type": ["number", "null"] },
+        "max": { "type": ["number", "null"] },
+        "currency": { "type": ["string", "null"] }
+      }
+    },
+    "headcount": {
+      "type": ["object", "null"],
+      "properties": {
+        "authorized": { "type": ["number", "null"] },
+        "filled": { "type": ["number", "null"] },
+        "open": { "type": ["number", "null"] }
+      }
+    },
+    "location": { "type": ["string", "null"] },
+    "contractType": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "hiringPipeline": {
+      "type": ["object", "null"],
+      "properties": {
+        "stage": { "type": ["string", "null"] },
+        "status": { "type": ["string", "null"] },
+        "owner": { "type": ["string", "null"] }
+      }
+    },
+    "diversity": {
+      "type": ["object", "null"],
+      "properties": {
+        "gender": { "type": ["object", "null"] },
+        "ethnicity": { "type": ["object", "null"] },
+        "disability": { "type": ["object", "null"] },
+        "ageBands": { "type": ["object", "null"] }
+      }
+    },
+    "notes": { "type": ["string", "null"] },
     "children": {
       "type": "array",
       "items": { "$ref": "#" }
     }
   }
 }
+

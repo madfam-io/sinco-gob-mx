@@ -39,6 +39,11 @@
     cardsNext: document.getElementById("cardsNext"),
     cardsPage: document.getElementById("cardsPage"),
     cardsPager: document.getElementById("cardsPager"),
+    filtersBar: document.getElementById("filtersBar"),
+    filterFamily: document.getElementById("filterFamily"),
+    filterLevel: document.getElementById("filterLevel"),
+    filterLocation: document.getElementById("filterLocation"),
+    filterOpenRoles: document.getElementById("filterOpenRoles"),
   };
 
   async function init() {
@@ -95,6 +100,11 @@
     if (DOM.tableNext) DOM.tableNext.addEventListener("click", () => changeTablePage(1));
     if (DOM.cardsPrev) DOM.cardsPrev.addEventListener("click", () => changeCardsPage(-1));
     if (DOM.cardsNext) DOM.cardsNext.addEventListener("click", () => changeCardsPage(1));
+    if (DOM.filtersBar) {
+      [DOM.filterFamily, DOM.filterLevel, DOM.filterLocation, DOM.filterOpenRoles].forEach((el) => {
+        if (el) el.addEventListener('change', handleSearch);
+      });
+    }
     DOM.tableView.addEventListener("click", (e) => {
       const row = e.target.closest("tr[data-code]");
       if (row) {
@@ -117,6 +127,34 @@
 
   function processData() {
     state.allNodes = state.rootNode.descendants();
+    const families = new Set();
+    const levels = new Set();
+    const locations = new Set();
+    state.allNodes.forEach((n) => {
+      const d = n.data || {};
+      if (d.jobFamily) families.add(d.jobFamily);
+      if (d.level !== undefined && d.level !== null && d.level !== "") levels.add(d.level);
+      if (d.location) locations.add(d.location);
+    });
+    if (DOM.filterFamily) populateSelect(DOM.filterFamily, Array.from(families).sort());
+    if (DOM.filterLevel) populateSelect(DOM.filterLevel, Array.from(levels).sort((a,b)=>String(a).localeCompare(String(b))));
+    if (DOM.filterLocation) populateSelect(DOM.filterLocation, Array.from(locations).sort());
+  }
+
+  function populateSelect(selectEl, values) {
+    const frag = document.createDocumentFragment();
+    const any = document.createElement('option');
+    any.value = '';
+    any.textContent = 'Todos';
+    frag.appendChild(any);
+    values.forEach((v) => {
+      const opt = document.createElement('option');
+      opt.value = String(v);
+      opt.textContent = String(v);
+      frag.appendChild(opt);
+    });
+    selectEl.innerHTML = '';
+    selectEl.appendChild(frag);
   }
 
   function updateStatsFromData(sincoData) {
@@ -506,29 +544,51 @@
     const searchTerm = DOM.searchInput.value.toLowerCase().trim();
     d3.selectAll(".node.search-highlight").classed("search-highlight", false);
 
-    if (state.currentView === "tree") {
-      if (!searchTerm) return;
-      const matchingNodes = state.allNodes.filter(
-        (node) =>
-          node.data.name.toLowerCase().includes(searchTerm) ||
-          node.data.code.toLowerCase().includes(searchTerm)
+    const filterFamily = DOM.filterFamily ? DOM.filterFamily.value : '';
+    const filterLevel = DOM.filterLevel ? DOM.filterLevel.value : '';
+    const filterLocation = DOM.filterLocation ? DOM.filterLocation.value : '';
+    const filterOpenRoles = DOM.filterOpenRoles ? DOM.filterOpenRoles.value : '';
+
+    const matchesText = (node) => {
+      if (!searchTerm) return true;
+      const d = node.data;
+      return (
+        String(d.name).toLowerCase().includes(searchTerm) ||
+        String(d.code).toLowerCase().includes(searchTerm) ||
+        String(d.avgSalary).toLowerCase().includes(searchTerm) ||
+        String(d.jobFamily || '').toLowerCase().includes(searchTerm)
       );
-      if (matchingNodes.length > 0) {
+    };
+
+    const matchesFilters = (node) => {
+      const d = node.data || {};
+      if (filterFamily && d.jobFamily !== filterFamily) return false;
+      if (filterLevel && String(d.level) !== filterLevel) return false;
+      if (filterLocation && d.location !== filterLocation) return false;
+      if (filterOpenRoles === 'open') {
+        const open = (d.headcount && typeof d.headcount.open === 'number') ? d.headcount.open : 0;
+        if (open <= 0) return false;
+      } else if (filterOpenRoles === 'filled') {
+        const open = (d.headcount && typeof d.headcount.open === 'number') ? d.headcount.open : 0;
+        if (open > 0) return false;
+      }
+      return true;
+    };
+
+    if (state.currentView === "tree") {
+      const matchingNodes = state.allNodes.filter((node) => matchesText(node) && matchesFilters(node));
+      if (searchTerm && matchingNodes.length > 0) {
         expandPathToNode(matchingNodes[0]);
         centerNode(matchingNodes[0]);
-        matchingNodes.forEach((node) => {
-          d3.selectAll("g.node")
-            .filter((d) => d.id === node.id)
-            .classed("search-highlight", true);
-        });
       }
+      matchingNodes.forEach((node) => {
+        d3.selectAll("g.node")
+          .filter((d) => d.id === node.id)
+          .classed("search-highlight", !!searchTerm);
+      });
     } else {
       const results = state.allNodes.filter(
-        (node) =>
-          node.depth > 0 &&
-          (node.data.name.toLowerCase().includes(searchTerm) ||
-            node.data.code.toLowerCase().includes(searchTerm) ||
-            String(node.data.avgSalary).includes(searchTerm))
+        (node) => node.depth > 0 && matchesText(node) && matchesFilters(node)
       );
       if (state.currentView === "table") {
         state.tablePage = 1;

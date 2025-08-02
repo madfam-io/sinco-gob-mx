@@ -492,7 +492,20 @@
           <button id="btn-collapse-all" class="view-btn">Colapsar todo</button>
         </div>
       </div>
-      <div class="controls-row" style="margin-top:0.5rem">
+      <div class="controls-row" id="filtersBar" style="margin-top:0.5rem; gap:0.5rem; flex-wrap:wrap">
+        <label class="stat-label" for="filterFamily">Familia</label>
+        <select id="filterFamily" aria-label="Filtrar por familia"></select>
+        <label class="stat-label" for="filterLevel">Nivel</label>
+        <select id="filterLevel" aria-label="Filtrar por nivel"></select>
+        <label class="stat-label" for="filterLocation">Ubicación</label>
+        <select id="filterLocation" aria-label="Filtrar por ubicación"></select>
+        <label class="stat-label" for="filterOpenRoles">Vacantes</label>
+        <select id="filterOpenRoles" aria-label="Filtrar por vacantes">
+          <option value="">Todos</option>
+          <option value="open">Solo abiertos</option>
+          <option value="filled">Sin vacantes</option>
+        </select>
+        <div style="flex:1"></div>
         <label for="langSelect" class="stat-label" style="margin-right:0.5rem">Idioma</label>
         <select id="langSelect" aria-label="Seleccionar idioma">
           <option value="es">ES</option>
