@@ -174,15 +174,17 @@
       }
 
       .view-btn {
-        padding: 0.5rem 0.75rem;
+        padding: 0.75rem 1rem;
         background: transparent;
         border: none;
         color: var(--text-secondary);
         cursor: pointer;
         border-radius: 15px;
         transition: all 0.3s ease;
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         white-space: nowrap;
+        min-height: 44px;
+        min-width: 44px;
       }
       .view-btn.active {
         background: var(--accent-gradient);
@@ -289,8 +291,17 @@
 
       .cards-view {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 1rem;
+      }
+
+      @media (max-width: 480px) {
+        .stats-bar {
+          grid-template-columns: 1fr;
+        }
+        .controls { padding: 0.75rem; }
+        .content { height: calc(100vh - 220px); }
+        .division-card { padding: 1rem; }
       }
       .division-card {
         background: linear-gradient(135deg, var(--bg-interactive), rgba(16, 33, 62, 0.3));
@@ -492,6 +503,9 @@
 
     <div class="content" role="main" aria-labelledby="pageHeading">
       <div id="treeView" class="tree-view" role="tabpanel" aria-labelledby="btn-tree">
+        <div class="controls-row" style="justify-content:flex-end;margin-bottom:0.5rem">
+          <button id="btn-reset-zoom" class="view-btn">Restablecer zoom</button>
+        </div>
         <svg id="treeSvg" role="img" aria-label="Árbol de ocupaciones"></svg>
       </div>
       <div id="tableView" class="table-view hidden" role="tabpanel" aria-labelledby="btn-table">
