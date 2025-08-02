@@ -17,7 +17,7 @@
     "check:schema": "node scripts/validate-data.mjs",
     "test:e2e": "vite & VITE_PID= && npx playwright test && kill  || true",
     "lhci:precommit": "bash -lc 'python -m http.server 8000 >/dev/null 2>&1 & PID=$!; npx -y wait-on http://127.0.0.1:8000 && npx -y @lhci/cli autorun; kill $PID 2>/dev/null || true' || true",
-    "prepare": "husky"
+    "prepare": "command -v husky >/dev/null 2>&1 && husky || true"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +25,7 @@
   "type": "module",
   "browserslist": "defaults",
   "devDependencies": {
+    "husky": "^9.1.6",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.54.2",
     "ajv": "^8.17.1",
