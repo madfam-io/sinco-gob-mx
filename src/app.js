@@ -68,6 +68,7 @@ import * as d3 from "d3";
     state.d3.g = state.d3.svg.append("g").attr("transform", "translate(80,0)");
     state.d3.treeLayout = d3.tree().size([h, w - 200]);
     state.rootNode = d3.hierarchy(sincoData, (d) => d.children);
+    computeDivisionAggregates(sincoData);
     state.rootNode.x0 = h / 2;
     state.rootNode.y0 = 0;
     if (state.rootNode.children) state.rootNode.children.forEach(collapse);
@@ -110,13 +111,6 @@ import * as d3 from "d3";
     const families = new Set();
     const levels = new Set();
     const locations = new Set();
-    const leaves = state.allNodes.filter((n) => !n.children && !n._children);
-    const leafCountByDivision = new Map();
-    leaves.forEach((leaf) => {
-      const division = leaf.ancestors()[1];
-      if (division) leafCountByDivision.set(division.data.code, (leafCountByDivision.get(division.data.code) || 0) + 1);
-    });
-    state.leafCountByDivision = leafCountByDivision;
     state.allNodes.forEach((n) => {
       const d = n.data || {};
       if (d.jobFamily) families.add(d.jobFamily);
@@ -159,6 +153,20 @@ import * as d3 from "d3";
     DOM.statDivisions.textContent = (root.children ? root.children.length : 0).toString();
     DOM.statTotalEmployees.textContent = totalEmployees.toLocaleString();
     DOM.statAvgSalary.textContent = `$${(totalEmployees > 0 ? Math.round(weightedSalarySum / totalEmployees) : 0).toLocaleString()} MXN`;
+  }
+  function computeDivisionAggregates(sincoData) {
+    const divisionLeafCounts = new Map();
+    const divisionEmployeeTotals = new Map();
+    const root = d3.hierarchy(sincoData, (d) => d.children);
+    const divisions = root.children || [];
+    divisions.forEach((div) => {
+      const leaves = div.leaves();
+      divisionLeafCounts.set(div.data.code, leaves.length);
+      const totalEmp = d3.sum(leaves, (d) => d.data.employees || 0);
+      divisionEmployeeTotals.set(div.data.code, totalEmp);
+    });
+    state.divisionLeafCounts = divisionLeafCounts;
+    state.divisionEmployeeTotals = divisionEmployeeTotals;
   }
   function getOccupationLevel(code) {
     const levels = { 1: "División", 2: "Grupo Principal", 3: "Subgrupo", 4: "Grupo Unitario" };
@@ -358,6 +366,7 @@ import * as d3 from "d3";
         : state.rootNode && state.rootNode.children
           ? state.rootNode.children
           : [];
+    if (!state.leafCountByDivision || state.leafCountByDivision.size === 0) processData();
     const totalPages = Math.max(1, Math.ceil(divisionsAll.length / state.pageSize));
     if (state.cardsPage > totalPages) state.cardsPage = totalPages;
     const pageItems = paginate(divisionsAll, state.cardsPage, state.pageSize);
@@ -381,9 +390,9 @@ import * as d3 from "d3";
       const card = document.createElement("div");
       card.className = "division-card";
       card.dataset.code = division.data.code;
-      const count = state.leafCountByDivision?.get(division.data.code) || 0;
-      const leafNodes = division.descendants().filter((d) => !d.children && !d._children);
-      const totalEmployees = d3.sum(leafNodes, (d) => d.data.employees || 0);
+      const code = division.data.code;
+      const count = state.divisionLeafCounts?.get(code) ?? state.leafCountByDivision?.get(code) ?? 0;
+      const totalEmployees = state.divisionEmployeeTotals?.get(code) ?? 0;
       card.innerHTML = `
               <div class="division-header">
                   <div class="division-title">${division.data.name}</div>
