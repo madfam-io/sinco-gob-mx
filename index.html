@@ -442,7 +442,7 @@
             DOM.loader.classList.remove('hidden');
             try {
                 // Asynchronously fetch the data
-                const response = await fetch('./sincoData.json');
+                const response = await fetch('sincoData.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
