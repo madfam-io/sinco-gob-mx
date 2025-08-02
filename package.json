@@ -14,7 +14,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "check:schema": "node scripts/validate-data.mjs"
+    "check:schema": "node scripts/validate-data.mjs",
+    "test:e2e": "vite & VITE_PID= && npx playwright test && kill  || true"
   },
   "keywords": [],
   "author": "",
@@ -23,13 +24,16 @@
   "browserslist": "defaults",
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.54.2",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
+    "axe-core": "^4.10.3",
     "eslint": "^9.32.0",
     "eslint-plugin-html": "^8.1.3",
     "eslint-plugin-security": "^3.0.1",
     "http-server": "^14.1.1",
     "linkinator": "^6.1.4",
+    "playwright": "^1.54.2",
     "prettier": "^3.6.2",
     "vite": "^7.0.6",
     "vite-plugin-html": "^3.2.2"
