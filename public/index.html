@@ -440,7 +440,10 @@
   <body>
     <div class="header" role="banner">
       <h1 id="pageHeading">SINCO 2019 - Sistema Nacional de Clasificación de Ocupaciones</h1>
-      <div class="stats-bar">
+      <div class="controls-row" style="justify-content:flex-end;margin-bottom:0.5rem">
+        <button id="btn-toggle-stats" class="view-btn" aria-expanded="true" aria-controls="statsBar">Ocultar métricas</button>
+      </div>
+      <div class="stats-bar" id="statsBar">
         <div class="stat-item">
           <div class="stat-label">Total Ocupaciones</div>
           <div id="stat-total-occupations" class="stat-value">...</div>
