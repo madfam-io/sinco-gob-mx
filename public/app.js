@@ -89,6 +89,7 @@
   function setupEventListeners() {
     DOM.searchInput.addEventListener("input", debounce(handleSearch, 300));
     DOM.viewToggle.addEventListener("click", handleViewSwitch);
+    DOM.viewToggle.addEventListener("keydown", handleTabsKeydown);
     window.addEventListener("resize", debounce(handleResize, 250));
     if (DOM.tablePrev) DOM.tablePrev.addEventListener("click", () => changeTablePage(-1));
     if (DOM.tableNext) DOM.tableNext.addEventListener("click", () => changeTablePage(1));
@@ -218,7 +219,10 @@
       .append("g")
       .attr("class", "node")
       .attr("transform", `translate(${source.y0},${source.x0})`)
+      .attr("tabindex", 0)
+      .attr("role", "treeitem")
       .on("click", handleNodeClick)
+      .on("keydown", handleNodeKeydown)
       .on("mouseover", handleMouseOver)
       .on("mousemove", handleMouseMove)
       .on("mouseout", handleMouseOut);
@@ -398,13 +402,24 @@
     DOM.cardsContainer.appendChild(fragment);
   }
 
+  function setActiveTab(btn) {
+    DOM.viewToggle.querySelectorAll('[role="tab"]').forEach((el) => {
+      el.classList.remove("active");
+      el.setAttribute("aria-selected", "false");
+      el.setAttribute("tabindex", "-1");
+    });
+    btn.classList.add("active");
+    btn.setAttribute("aria-selected", "true");
+    btn.setAttribute("tabindex", "0");
+    btn.focus();
+  }
+
   function handleViewSwitch(e) {
     const button = e.target.closest(".view-btn");
     if (!button || button.classList.contains("active")) return;
 
     state.currentView = button.dataset.view;
-    DOM.viewToggle.querySelector(".active").classList.remove("active");
-    button.classList.add("active");
+    setActiveTab(button);
 
     [DOM.treeView, DOM.tableView, DOM.cardsView].forEach((view) => view.classList.add("hidden"));
     document.getElementById(`${state.currentView}View`).classList.remove("hidden");
@@ -420,6 +435,28 @@
   }
 
   function handleNodeClick(event, d) {
+    toggleNode(d);
+  }
+
+  function handleNodeKeydown(event, d) {
+    switch (event.key) {
+      case "Enter":
+      case " ":
+        event.preventDefault();
+        toggleNode(d);
+        break;
+      case "ArrowRight":
+        if (d._children) { toggleNode(d); }
+        break;
+      case "ArrowLeft":
+        if (d.children) { toggleNode(d); }
+        break;
+      default:
+        break;
+    }
+  }
+
+  function toggleNode(d) {
     if (d.children) {
       d._children = d.children;
       d.children = null;
@@ -428,6 +465,33 @@
       d._children = null;
     }
     updateTree(d);
+  }
+
+  function handleTabsKeydown(e) {
+    const tabs = Array.from(DOM.viewToggle.querySelectorAll('[role="tab"]'));
+    const currentIndex = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+    if (currentIndex < 0) return;
+    let nextIndex = currentIndex;
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        nextIndex = (currentIndex + 1) % tabs.length;
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+        break;
+      case "Home":
+        nextIndex = 0;
+        break;
+      case "End":
+        nextIndex = tabs.length - 1;
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    tabs[nextIndex].click();
   }
 
   function handleSearch() {
