@@ -1,469 +1,578 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistema Nacional de Clasificación de Ocupaciones (SINCO) 2019 - México</title>
-    
+
     <!-- D3.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-    
+
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Internal Stylesheet -->
     <style>
-        :root {
-            --bg-primary: #0f0f1f;
-            --bg-secondary: #1a1a2e;
-            --bg-tertiary: #16213e;
-            --bg-interactive: rgba(22, 33, 62, 0.5);
-            --text-primary: #e0e0e0;
-            --text-secondary: #999;
-            --accent-primary: #00d4ff;
-            --accent-secondary: #0099ff;
-            --accent-gradient: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            --shadow-color-light: rgba(0, 212, 255, 0.3);
-            --shadow-color-dark: rgba(0, 0, 0, 0.5);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            --success-gradient: linear-gradient(135deg, #00ff88, #00cc66);
-            --warning-gradient: linear-gradient(135deg, #ffaa00, #ff8800);
-            --danger-gradient: linear-gradient(135deg, #ff4466, #ff2244);
+      :root {
+        --bg-primary: #0f0f1f;
+        --bg-secondary: #1a1a2e;
+        --bg-tertiary: #16213e;
+        --bg-interactive: rgba(22, 33, 62, 0.5);
+        --text-primary: #e0e0e0;
+        --text-secondary: #999;
+        --accent-primary: #00d4ff;
+        --accent-secondary: #0099ff;
+        --accent-gradient: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        --shadow-color-light: rgba(0, 212, 255, 0.3);
+        --shadow-color-dark: rgba(0, 0, 0, 0.5);
+        --border-color: rgba(255, 255, 255, 0.1);
+        --font-family:
+          "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+          sans-serif;
+        --success-gradient: linear-gradient(135deg, #00ff88, #00cc66);
+        --warning-gradient: linear-gradient(135deg, #ffaa00, #ff8800);
+        --danger-gradient: linear-gradient(135deg, #ff4466, #ff2244);
+      }
+
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--font-family);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow: hidden;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .header {
+        background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+        padding: 1rem;
+        box-shadow: 0 4px 20px var(--shadow-color-dark);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .header h1 {
+        font-size: 1.5rem;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        margin-bottom: 1rem;
+        animation: glow 2s ease-in-out infinite alternate;
+        text-align: center;
+      }
+
+      @keyframes glow {
+        from {
+          filter: drop-shadow(0 0 15px var(--shadow-color-light));
         }
-
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        to {
+          filter: drop-shadow(0 0 25px rgba(0, 153, 255, 0.8));
         }
+      }
 
-        body {
-            font-family: var(--font-family);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow: hidden;
+      .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+      }
+
+      .stat-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.5rem;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+
+      .stat-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px var(--shadow-color-light);
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        opacity: 0.8;
+      }
+      .stat-value {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: var(--accent-primary);
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--bg-interactive);
+      }
+
+      .search-box {
+        width: 100%;
+        position: relative;
+      }
+      .search-box input {
+        width: 100%;
+        padding: 0.8rem 1rem 0.8rem 3rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid var(--border-color);
+        border-radius: 25px;
+        color: white;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 20px var(--shadow-color-light);
+      }
+      .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--accent-primary);
+        pointer-events: none;
+      }
+
+      .controls-row {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .view-toggle {
+        display: flex;
+        gap: 0.25rem;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.25rem;
+        border-radius: 20px;
+      }
+
+      .view-btn {
+        padding: 0.5rem 0.75rem;
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+      .view-btn.active {
+        background: var(--accent-gradient);
+        color: white;
+        box-shadow: 0 4px 15px var(--shadow-color-light);
+      }
+
+      .content {
+        height: calc(100vh - 210px);
+        position: relative;
+      }
+
+      .tree-view,
+      .table-view,
+      .cards-view {
+        height: 100%;
+        overflow: auto;
+        padding: 1rem;
+      }
+
+      .node {
+        cursor: pointer;
+      }
+      .node circle {
+        fill: var(--bg-tertiary);
+        stroke: var(--accent-primary);
+        stroke-width: 2px;
+        transition: all 0.3s ease;
+      }
+      .node:hover circle,
+      .node.highlight circle {
+        fill: var(--accent-primary);
+        stroke-width: 4px;
+        filter: drop-shadow(0 0 10px var(--accent-primary));
+      }
+      .node.search-highlight circle {
+        stroke: #ff0066;
+        fill: #ff0066;
+        filter: drop-shadow(0 0 15px #ff0066);
+      }
+      .node text {
+        font-size: 12px;
+        fill: var(--text-primary);
+        text-shadow: 0 1px 3px var(--shadow-color-dark);
+        pointer-events: none;
+      }
+      .link {
+        fill: none;
+        stroke: rgba(0, 212, 255, 0.3);
+        stroke-width: 1.5px;
+      }
+      .link.highlight {
+        stroke: var(--accent-primary);
+        stroke-width: 2.5px;
+      }
+
+      .table-container {
+        background: rgba(22, 33, 62, 0.3);
+        border-radius: 15px;
+        overflow: auto;
+        max-height: 100%;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 255, 0.2));
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      td {
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+      tr {
+        transition: background-color 0.2s ease;
+      }
+      tr:hover {
+        background: rgba(0, 212, 255, 0.05);
+      }
+      .salary-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--bg-primary);
+      }
+      .salary-high {
+        background: var(--success-gradient);
+      }
+      .salary-medium {
+        background: var(--warning-gradient);
+      }
+      .salary-low {
+        background: var(--danger-gradient);
+        color: white;
+      }
+
+      .cards-view {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1rem;
+      }
+      .division-card {
+        background: linear-gradient(135deg, var(--bg-interactive), rgba(16, 33, 62, 0.3));
+        border: 2px solid var(--border-color);
+        border-radius: 15px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .division-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-primary);
+        box-shadow: 0 4px 30px var(--shadow-color-light);
+      }
+      .division-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        gap: 1rem;
+      }
+      .division-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: var(--accent-primary);
+      }
+      .occupation-count {
+        background: rgba(0, 212, 255, 0.2);
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+
+      .tooltip {
+        position: fixed;
+        padding: 1rem;
+        background: rgba(10, 10, 10, 0.95);
+        border: 2px solid rgba(0, 212, 255, 0.5);
+        border-radius: 10px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1001;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px var(--shadow-color-light);
+        max-width: 300px;
+      }
+      .tooltip h3 {
+        color: var(--accent-primary);
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+      .tooltip p {
+        margin: 0.25rem 0;
+        font-size: 0.9rem;
+      }
+      .tooltip strong {
+        color: var(--text-primary);
+      }
+
+      .loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease;
+      }
+      .loader-circle {
+        width: 80px;
+        height: 80px;
+        border: 4px solid rgba(0, 212, 255, 0.2);
+        border-top-color: var(--accent-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
+      }
 
-        .hidden { display: none !important; }
-
+      @media (min-width: 768px) {
         .header {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-            padding: 1rem;
-            box-shadow: 0 4px 20px var(--shadow-color-dark);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+          padding: 1.5rem 2rem;
         }
-
         .header h1 {
-            font-size: 1.5rem;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-            margin-bottom: 1rem;
-            animation: glow 2s ease-in-out infinite alternate;
-            text-align: center;
+          font-size: 2.5rem;
+          text-align: left;
         }
-
-        @keyframes glow {
-            from { filter: drop-shadow(0 0 15px var(--shadow-color-light)); }
-            to { filter: drop-shadow(0 0 25px rgba(0, 153, 255, 0.8)); }
-        }
-
         .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
+          display: flex;
+          gap: 2rem;
+          grid-template-columns: none;
         }
-
         .stat-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.5rem;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            text-align: center;
+          padding: 0.5rem 1rem;
+          text-align: left;
         }
-
-        .stat-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px var(--shadow-color-light);
+        .stat-label {
+          font-size: 0.875rem;
         }
-
-        .stat-label { font-size: 0.75rem; opacity: 0.8; }
-        .stat-value { font-size: 1.1rem; font-weight: bold; color: var(--accent-primary); }
-
+        .stat-value {
+          font-size: 1.5rem;
+        }
         .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--bg-interactive);
+          flex-direction: row;
+          padding: 1rem 2rem;
+          gap: 1rem;
+          flex-wrap: wrap;
+          align-items: center;
         }
-
-        .search-box { width: 100%; position: relative; }
-        .search-box input {
-            width: 100%;
-            padding: 0.8rem 1rem 0.8rem 3rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid var(--border-color);
-            border-radius: 25px;
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+        .search-box {
+          flex: 1;
+          min-width: 300px;
         }
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px var(--shadow-color-light);
-        }
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--accent-primary);
-            pointer-events: none;
-        }
-
         .controls-row {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: space-between;
-            align-items: center;
+          gap: 1rem;
         }
-
-        .view-toggle {
-            display: flex;
-            gap: 0.25rem;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.25rem;
-            border-radius: 20px;
-        }
-
         .view-btn {
-            padding: 0.5rem 0.75rem;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            white-space: nowrap;
+          padding: 0.5rem 1rem;
+          font-size: 1rem;
         }
-        .view-btn.active {
-            background: var(--accent-gradient);
-            color: white;
-            box-shadow: 0 4px 15px var(--shadow-color-light);
-        }
-        
         .content {
-            height: calc(100vh - 210px);
-            position: relative;
+          height: calc(100vh - 240px);
         }
-
-        .tree-view, .table-view, .cards-view {
-            height: 100%;
-            overflow: auto;
-            padding: 1rem;
-        }
-
-        .node { cursor: pointer; }
-        .node circle {
-            fill: var(--bg-tertiary);
-            stroke: var(--accent-primary);
-            stroke-width: 2px;
-            transition: all 0.3s ease;
-        }
-        .node:hover circle, .node.highlight circle {
-            fill: var(--accent-primary);
-            stroke-width: 4px;
-            filter: drop-shadow(0 0 10px var(--accent-primary));
-        }
-        .node.search-highlight circle {
-            stroke: #ff0066;
-            fill: #ff0066;
-            filter: drop-shadow(0 0 15px #ff0066);
-        }
-        .node text {
-            font-size: 12px;
-            fill: var(--text-primary);
-            text-shadow: 0 1px 3px var(--shadow-color-dark);
-            pointer-events: none;
-        }
-        .link {
-            fill: none;
-            stroke: rgba(0, 212, 255, 0.3);
-            stroke-width: 1.5px;
-        }
-        .link.highlight {
-            stroke: var(--accent-primary);
-            stroke-width: 2.5px;
-        }
-
-        .table-container {
-            background: rgba(22, 33, 62, 0.3);
-            border-radius: 15px;
-            overflow: auto;
-            max-height: 100%;
-        }
-        table { width: 100%; border-collapse: collapse; }
-        th {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 255, 0.2));
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border-color); }
-        tr { transition: background-color 0.2s ease; }
-        tr:hover { background: rgba(0, 212, 255, 0.05); }
-        .salary-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--bg-primary);
-        }
-        .salary-high { background: var(--success-gradient); }
-        .salary-medium { background: var(--warning-gradient); }
-        .salary-low { background: var(--danger-gradient); color: white; }
-
-        .cards-view {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1rem;
-        }
-        .division-card {
-            background: linear-gradient(135deg, var(--bg-interactive), rgba(16, 33, 62, 0.3));
-            border: 2px solid var(--border-color);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .division-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-primary);
-            box-shadow: 0 4px 30px var(--shadow-color-light);
-        }
-        .division-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            gap: 1rem;
-        }
-        .division-title { font-size: 1.1rem; font-weight: bold; color: var(--accent-primary); }
-        .occupation-count {
-            background: rgba(0, 212, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-        
-        .tooltip {
-            position: fixed;
-            padding: 1rem;
-            background: rgba(10, 10, 10, 0.95);
-            border: 2px solid rgba(0, 212, 255, 0.5);
-            border-radius: 10px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1001;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px var(--shadow-color-light);
-            max-width: 300px;
-        }
-        .tooltip h3 { color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 1.1rem; }
-        .tooltip p { margin: 0.25rem 0; font-size: 0.9rem; }
-        .tooltip strong { color: var(--text-primary); }
-
-        .loader {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.3s ease;
-        }
-        .loader-circle {
-            width: 80px;
-            height: 80px;
-            border: 4px solid rgba(0, 212, 255, 0.2);
-            border-top-color: var(--accent-primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        @media (min-width: 768px) {
-            .header { padding: 1.5rem 2rem; }
-            .header h1 { font-size: 2.5rem; text-align: left; }
-            .stats-bar { display: flex; gap: 2rem; grid-template-columns: none; }
-            .stat-item { padding: 0.5rem 1rem; text-align: left; }
-            .stat-label { font-size: 0.875rem; }
-            .stat-value { font-size: 1.5rem; }
-            .controls { flex-direction: row; padding: 1rem 2rem; gap: 1rem; flex-wrap: wrap; align-items: center; }
-            .search-box { flex: 1; min-width: 300px; }
-            .controls-row { gap: 1rem; }
-            .view-btn { padding: 0.5rem 1rem; font-size: 1rem; }
-            .content { height: calc(100vh - 240px); }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        <h1>SINCO 2019 - Sistema Nacional de Clasificación de Ocupaciones</h1>
-        <div class="stats-bar">
-            <div class="stat-item">
-                <div class="stat-label">Total Ocupaciones</div>
-                <div id="stat-total-occupations" class="stat-value">...</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Divisiones</div>
-                <div id="stat-divisions" class="stat-value">...</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Total Empleados</div>
-                <div id="stat-total-employees" class="stat-value">...</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Salario Promedio</div>
-                <div id="stat-avg-salary" class="stat-value">...</div>
-            </div>
+      <h1>SINCO 2019 - Sistema Nacional de Clasificación de Ocupaciones</h1>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-label">Total Ocupaciones</div>
+          <div id="stat-total-occupations" class="stat-value">...</div>
         </div>
+        <div class="stat-item">
+          <div class="stat-label">Divisiones</div>
+          <div id="stat-divisions" class="stat-value">...</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Total Empleados</div>
+          <div id="stat-total-employees" class="stat-value">...</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Salario Promedio</div>
+          <div id="stat-avg-salary" class="stat-value">...</div>
+        </div>
+      </div>
     </div>
-    
+
     <div class="controls">
-        <div class="search-box">
-            <span class="search-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </span>
-            <input type="text" id="searchInput" placeholder="Buscar ocupación, código o salario...">
+      <div class="search-box">
+        <span class="search-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" id="searchInput" placeholder="Buscar ocupación, código o salario..." />
+      </div>
+
+      <div class="controls-row">
+        <div class="view-toggle">
+          <button id="btn-tree" class="view-btn active" data-view="tree">Árbol</button>
+          <button id="btn-table" class="view-btn" data-view="table">Tabla</button>
+          <button id="btn-cards" class="view-btn" data-view="cards">Tarjetas</button>
         </div>
-        
-        <div class="controls-row">
-            <div class="view-toggle">
-                <button id="btn-tree" class="view-btn active" data-view="tree">Árbol</button>
-                <button id="btn-table" class="view-btn" data-view="table">Tabla</button>
-                <button id="btn-cards" class="view-btn" data-view="cards">Tarjetas</button>
-            </div>
-        </div>
+      </div>
     </div>
-    
+
     <div class="content">
-        <div id="treeView" class="tree-view">
-            <svg id="treeSvg"></svg>
+      <div id="treeView" class="tree-view">
+        <svg id="treeSvg"></svg>
+      </div>
+      <div id="tableView" class="table-view hidden">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Ocupación</th>
+                <th>División</th>
+                <th>Salario Promedio</th>
+                <th>Formalidad</th>
+                <th>Empleados</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
         </div>
-        <div id="tableView" class="table-view hidden">
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Ocupación</th>
-                            <th>División</th>
-                            <th>Salario Promedio</th>
-                            <th>Formalidad</th>
-                            <th>Empleados</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
-            </div>
-        </div>
-        <div id="cardsView" class="cards-view hidden"></div>
+      </div>
+      <div id="cardsView" class="cards-view hidden"></div>
     </div>
-    
+
     <div class="tooltip" id="tooltip"></div>
     <div class="loader" id="loader">
-        <div class="loader-circle"></div>
+      <div class="loader-circle"></div>
     </div>
-    
+
     <script>
-    (function() {
-        'use strict';
+      (function () {
+        "use strict";
 
         // --- STATE & CONSTANTS --- //
         const state = {
-            currentView: 'tree',
-            allNodes: [],
-            rootNode: null,
-            d3: {
-                svg: null,
-                g: null,
-                treeLayout: null,
-                zoom: null,
-                nodeId: 0
-            }
+          currentView: "tree",
+          allNodes: [],
+          rootNode: null,
+          d3: {
+            svg: null,
+            g: null,
+            treeLayout: null,
+            zoom: null,
+            nodeId: 0,
+          },
         };
 
         const DOM = {
-            loader: document.getElementById('loader'),
-            treeView: document.getElementById('treeView'),
-            tableView: document.getElementById('tableView'),
-            cardsView: document.getElementById('cardsView'),
-            treeSvg: d3.select("#treeSvg"),
-            tableBody: document.getElementById('tableBody'),
-            cardsContainer: document.getElementById('cardsView'),
-            searchInput: document.getElementById('searchInput'),
-            tooltip: document.getElementById('tooltip'),
-            viewToggle: document.querySelector('.view-toggle'),
-            statTotalOccupations: document.getElementById('stat-total-occupations'),
-            statDivisions: document.getElementById('stat-divisions'),
-            statTotalEmployees: document.getElementById('stat-total-employees'),
-            statAvgSalary: document.getElementById('stat-avg-salary'),
+          loader: document.getElementById("loader"),
+          treeView: document.getElementById("treeView"),
+          tableView: document.getElementById("tableView"),
+          cardsView: document.getElementById("cardsView"),
+          treeSvg: d3.select("#treeSvg"),
+          tableBody: document.getElementById("tableBody"),
+          cardsContainer: document.getElementById("cardsView"),
+          searchInput: document.getElementById("searchInput"),
+          tooltip: document.getElementById("tooltip"),
+          viewToggle: document.querySelector(".view-toggle"),
+          statTotalOccupations: document.getElementById("stat-total-occupations"),
+          statDivisions: document.getElementById("stat-divisions"),
+          statTotalEmployees: document.getElementById("stat-total-employees"),
+          statAvgSalary: document.getElementById("stat-avg-salary"),
         };
 
         // --- INITIALIZATION --- //
-        
+
         /**
          * Main function to initialize the application.
          * Fetches data, sets up visualizations and event listeners.
          */
         async function init() {
-            DOM.loader.classList.remove('hidden');
-            try {
-                // Asynchronously fetch the data
-                const response = await fetch('sincoData.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const sincoData = await response.json();
-
-                // Once data is loaded, proceed with setup
-                setupD3(sincoData);
-                processData();
-                updateStats();
-                setupEventListeners();
-
-            } catch (error) {
-                console.error("Failed to load and initialize SINCO data:", error);
-                DOM.loader.innerHTML = `<p style="color:white;">Error al cargar los datos. Por favor, intente de nuevo más tarde.</p>`;
-            } finally {
-                // Hide loader after a small delay for smooth transition
-                setTimeout(() => {
-                    DOM.loader.style.opacity = '0';
-                    setTimeout(() => DOM.loader.classList.add('hidden'), 300);
-                }, 500);
+          DOM.loader.classList.remove("hidden");
+          try {
+            // Asynchronously fetch the data
+            const response = await fetch("sincoData.json");
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
             }
+            const sincoData = await response.json();
+
+            // Once data is loaded, proceed with setup
+            setupD3(sincoData);
+            processData();
+            updateStats();
+            setupEventListeners();
+          } catch (error) {
+            console.error("Failed to load and initialize SINCO data:", error);
+            DOM.loader.innerHTML = `<p style="color:white;">Error al cargar los datos. Por favor, intente de nuevo más tarde.</p>`;
+          } finally {
+            // Hide loader after a small delay for smooth transition
+            setTimeout(() => {
+              DOM.loader.style.opacity = "0";
+              setTimeout(() => DOM.loader.classList.add("hidden"), 300);
+            }, 500);
+          }
         }
 
         /**
@@ -471,347 +580,431 @@
          * @param {object} sincoData - The hierarchical data for occupations.
          */
         function setupD3(sincoData) {
-            const container = DOM.treeView;
-            const width = container.clientWidth;
-            const height = container.clientHeight;
+          const container = DOM.treeView;
+          const width = container.clientWidth;
+          const height = container.clientHeight;
 
-            state.d3.svg = DOM.treeSvg
-                .attr("width", width)
-                .attr("height", height)
-                .attr("viewBox", `0 0 ${width} ${height}`);
+          state.d3.svg = DOM.treeSvg
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", `0 0 ${width} ${height}`);
 
-            state.d3.g = state.d3.svg.append("g").attr("transform", "translate(80,0)");
-            state.d3.treeLayout = d3.tree().size([height, width - 200]);
-            state.rootNode = d3.hierarchy(sincoData, d => d.children);
-            state.rootNode.x0 = height / 2;
-            state.rootNode.y0 = 0;
-            
-            state.rootNode.children.forEach(collapse);
-            updateTree(state.rootNode);
-            setupZoom();
+          state.d3.g = state.d3.svg.append("g").attr("transform", "translate(80,0)");
+          state.d3.treeLayout = d3.tree().size([height, width - 200]);
+          state.rootNode = d3.hierarchy(sincoData, (d) => d.children);
+          state.rootNode.x0 = height / 2;
+          state.rootNode.y0 = 0;
+
+          state.rootNode.children.forEach(collapse);
+          updateTree(state.rootNode);
+          setupZoom();
         }
 
         /**
          * Sets up all event listeners for the application.
          */
         function setupEventListeners() {
-            DOM.searchInput.addEventListener('input', debounce(handleSearch, 300));
-            DOM.viewToggle.addEventListener('click', handleViewSwitch);
-            window.addEventListener('resize', debounce(handleResize, 250));
-            DOM.tableView.addEventListener('click', (e) => {
-                const row = e.target.closest('tr[data-code]');
-                if (row) {
-                    switchViewAndHighlight(row.dataset.code);
-                }
-            });
-            DOM.cardsContainer.addEventListener('click', (e) => {
-                const card = e.target.closest('.division-card[data-code]');
-                if (card) {
-                    switchViewAndHighlight(card.dataset.code);
-                }
-            });
+          DOM.searchInput.addEventListener("input", debounce(handleSearch, 300));
+          DOM.viewToggle.addEventListener("click", handleViewSwitch);
+          window.addEventListener("resize", debounce(handleResize, 250));
+          DOM.tableView.addEventListener("click", (e) => {
+            const row = e.target.closest("tr[data-code]");
+            if (row) {
+              switchViewAndHighlight(row.dataset.code);
+            }
+          });
+          DOM.cardsContainer.addEventListener("click", (e) => {
+            const card = e.target.closest(".division-card[data-code]");
+            if (card) {
+              switchViewAndHighlight(card.dataset.code);
+            }
+          });
         }
 
         // --- DATA PROCESSING & HELPERS --- //
 
         function processData() {
-            state.allNodes = state.rootNode.descendants();
+          state.allNodes = state.rootNode.descendants();
         }
 
         function updateStats() {
-            const leafNodes = state.allNodes.filter(d => !d.children && !d._children);
-            const totalEmployees = d3.sum(leafNodes, d => d.data.employees || 0);
-            const weightedSalarySum = d3.sum(leafNodes, d => (d.data.avgSalary || 0) * (d.data.employees || 0));
-            
-            DOM.statTotalOccupations.textContent = leafNodes.length.toLocaleString();
-            DOM.statDivisions.textContent = state.rootNode.children.length;
-            DOM.statTotalEmployees.textContent = totalEmployees.toLocaleString();
-            DOM.statAvgSalary.textContent = `$${(totalEmployees > 0 ? Math.round(weightedSalarySum / totalEmployees) : 0).toLocaleString()} MXN`;
+          const leafNodes = state.allNodes.filter((d) => !d.children && !d._children);
+          const totalEmployees = d3.sum(leafNodes, (d) => d.data.employees || 0);
+          const weightedSalarySum = d3.sum(
+            leafNodes,
+            (d) => (d.data.avgSalary || 0) * (d.data.employees || 0)
+          );
+
+          DOM.statTotalOccupations.textContent = leafNodes.length.toLocaleString();
+          DOM.statDivisions.textContent = state.rootNode.children.length;
+          DOM.statTotalEmployees.textContent = totalEmployees.toLocaleString();
+          DOM.statAvgSalary.textContent = `$${(totalEmployees > 0 ? Math.round(weightedSalarySum / totalEmployees) : 0).toLocaleString()} MXN`;
         }
 
         function getOccupationLevel(code) {
-            const levels = { 1: 'División', 2: 'Grupo Principal', 3: 'Subgrupo', 4: 'Grupo Unitario' };
-            return levels[String(code).length] || 'Ocupación';
+          const levels = {
+            1: "División",
+            2: "Grupo Principal",
+            3: "Subgrupo",
+            4: "Grupo Unitario",
+          };
+          return levels[String(code).length] || "Ocupación";
         }
 
         function getSalaryClass(salary) {
-            if (!salary) return 'salary-low';
-            if (salary >= 20000) return 'salary-high';
-            if (salary >= 10000) return 'salary-medium';
-            return 'salary-low';
+          if (!salary) {
+            return "salary-low";
+          }
+          if (salary >= 20000) {
+            return "salary-high";
+          }
+          if (salary >= 10000) {
+            return "salary-medium";
+          }
+          return "salary-low";
         }
 
         function debounce(func, delay) {
-            let timeout;
-            return function(...args) {
-                const context = this;
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), delay);
-            };
+          let timeout;
+          return function (...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), delay);
+          };
         }
 
         // --- D3 & VISUALIZATION LOGIC --- //
 
         function setupZoom() {
-            state.d3.zoom = d3.zoom()
-                .scaleExtent([0.1, 3])
-                .on("zoom", (event) => state.d3.g.attr("transform", event.transform));
-            state.d3.svg.call(state.d3.zoom);
+          state.d3.zoom = d3
+            .zoom()
+            .scaleExtent([0.1, 3])
+            .on("zoom", (event) => state.d3.g.attr("transform", event.transform));
+          state.d3.svg.call(state.d3.zoom);
         }
-        
+
         function collapse(d) {
-            if (d.children) {
-                d._children = d.children;
-                d._children.forEach(collapse);
-                d.children = null;
-            }
+          if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+          }
         }
 
         function updateTree(source) {
-            const duration = 500;
-            const treeData = state.d3.treeLayout(state.rootNode);
-            const nodes = treeData.descendants();
-            const links = treeData.links();
+          const duration = 500;
+          const treeData = state.d3.treeLayout(state.rootNode);
+          const nodes = treeData.descendants();
+          const links = treeData.links();
 
-            nodes.forEach(d => { d.y = d.depth * 220; });
+          nodes.forEach((d) => {
+            d.y = d.depth * 220;
+          });
 
-            const node = state.d3.g.selectAll("g.node")
-                .data(nodes, d => d.id || (d.id = ++state.d3.nodeId));
+          const node = state.d3.g
+            .selectAll("g.node")
+            .data(nodes, (d) => d.id || (d.id = ++state.d3.nodeId));
 
-            const nodeEnter = node.enter().append("g")
-                .attr("class", "node")
-                .attr("transform", `translate(${source.y0},${source.x0})`)
-                .on("click", handleNodeClick)
-                .on("mouseover", handleMouseOver)
-                .on("mousemove", handleMouseMove)
-                .on("mouseout", handleMouseOut);
+          const nodeEnter = node
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", `translate(${source.y0},${source.x0})`)
+            .on("click", handleNodeClick)
+            .on("mouseover", handleMouseOver)
+            .on("mousemove", handleMouseMove)
+            .on("mouseout", handleMouseOut);
 
-            nodeEnter.append("circle").attr("r", 1e-6);
+          nodeEnter.append("circle").attr("r", 1e-6);
 
-            nodeEnter.append("text")
-                .attr("dy", "0.31em")
-                .attr("x", d => d._children ? -12 : 12)
-                .attr("text-anchor", d => d._children ? "end" : "start")
-                .text(d => {
-                    const name = d.data.name.split(':').pop().trim();
-                    return name.length > 25 ? name.substring(0, 25) + '...' : name;
-                })
-                .clone(true).lower()
-                .attr("stroke-linejoin", "round")
-                .attr("stroke-width", 3)
-                .attr("stroke", "var(--bg-primary)");
+          nodeEnter
+            .append("text")
+            .attr("dy", "0.31em")
+            .attr("x", (d) => (d._children ? -12 : 12))
+            .attr("text-anchor", (d) => (d._children ? "end" : "start"))
+            .text((d) => {
+              const name = d.data.name.split(":").pop().trim();
+              return name.length > 25 ? name.substring(0, 25) + "..." : name;
+            })
+            .clone(true)
+            .lower()
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-width", 3)
+            .attr("stroke", "var(--bg-primary)");
 
-            const nodeUpdate = nodeEnter.merge(node);
-            nodeUpdate.transition().duration(duration).attr("transform", d => `translate(${d.y},${d.x})`);
-            nodeUpdate.select("circle").attr("r", 8).style("fill", d => d._children ? "var(--accent-primary)" : "var(--bg-tertiary)");
+          const nodeUpdate = nodeEnter.merge(node);
+          nodeUpdate
+            .transition()
+            .duration(duration)
+            .attr("transform", (d) => `translate(${d.y},${d.x})`);
+          nodeUpdate
+            .select("circle")
+            .attr("r", 8)
+            .style("fill", (d) => (d._children ? "var(--accent-primary)" : "var(--bg-tertiary)"));
 
-            const nodeExit = node.exit().transition().duration(duration)
-                .attr("transform", `translate(${source.y},${source.x})`).remove();
-            nodeExit.select("circle").attr("r", 1e-6);
-            nodeExit.select("text").style("fill-opacity", 1e-6);
+          const nodeExit = node
+            .exit()
+            .transition()
+            .duration(duration)
+            .attr("transform", `translate(${source.y},${source.x})`)
+            .remove();
+          nodeExit.select("circle").attr("r", 1e-6);
+          nodeExit.select("text").style("fill-opacity", 1e-6);
 
-            const link = state.d3.g.selectAll("path.link").data(links, d => d.target.id);
-            const linkEnter = link.enter().insert("path", "g").attr("class", "link")
-                .attr("d", d3.linkHorizontal().x(() => source.y0).y(() => source.x0));
-            linkEnter.merge(link).transition().duration(duration)
-                .attr("d", d3.linkHorizontal().x(d => d.y).y(d => d.x));
-            link.exit().transition().duration(duration)
-                .attr("d", d3.linkHorizontal().x(() => source.y).y(() => source.x)).remove();
+          const link = state.d3.g.selectAll("path.link").data(links, (d) => d.target.id);
+          const linkEnter = link
+            .enter()
+            .insert("path", "g")
+            .attr("class", "link")
+            .attr(
+              "d",
+              d3
+                .linkHorizontal()
+                .x(() => source.y0)
+                .y(() => source.x0)
+            );
+          linkEnter
+            .merge(link)
+            .transition()
+            .duration(duration)
+            .attr(
+              "d",
+              d3
+                .linkHorizontal()
+                .x((d) => d.y)
+                .y((d) => d.x)
+            );
+          link
+            .exit()
+            .transition()
+            .duration(duration)
+            .attr(
+              "d",
+              d3
+                .linkHorizontal()
+                .x(() => source.y)
+                .y(() => source.x)
+            )
+            .remove();
 
-            nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+          nodes.forEach((d) => {
+            d.x0 = d.x;
+            d.y0 = d.y;
+          });
         }
 
         // --- RENDERING LOGIC --- //
 
         function populateTable(nodesToRender) {
-            const nodes = nodesToRender || state.allNodes;
-            const fragment = document.createDocumentFragment();
-            
-            nodes.forEach(node => {
-                if (node.depth === 0) return;
-                const item = node.data;
-                const row = document.createElement('tr');
-                row.dataset.code = item.code;
-                row.innerHTML = `
+          const nodes = nodesToRender || state.allNodes;
+          const fragment = document.createDocumentFragment();
+
+          nodes.forEach((node) => {
+            if (node.depth === 0) return;
+            const item = node.data;
+            const row = document.createElement("tr");
+            row.dataset.code = item.code;
+            row.innerHTML = `
                     <td>${item.code}</td>
-                    <td title="${node.ancestors().map(d => d.data.name).reverse().join(' > ')}">${item.name}</td>
-                    <td>${node.parent ? node.parent.data.name.split(':').pop().trim() : 'N/A'}</td>
-                    <td><span class="salary-badge ${getSalaryClass(item.avgSalary)}">${item.avgSalary?.toLocaleString() || 'N/A'} MXN</span></td>
-                    <td>${item.formality || 'N/A'}%</td>
-                    <td>${item.employees?.toLocaleString() || 'N/A'}</td>
+                    <td title="${node
+                      .ancestors()
+                      .map((d) => d.data.name)
+                      .reverse()
+                      .join(" > ")}">${item.name}</td>
+                    <td>${node.parent ? node.parent.data.name.split(":").pop().trim() : "N/A"}</td>
+                    <td><span class="salary-badge ${getSalaryClass(item.avgSalary)}">${item.avgSalary?.toLocaleString() || "N/A"} MXN</span></td>
+                    <td>${item.formality || "N/A"}%</td>
+                    <td>${item.employees?.toLocaleString() || "N/A"}</td>
                 `;
-                fragment.appendChild(row);
-            });
-            DOM.tableBody.innerHTML = '';
-            DOM.tableBody.appendChild(fragment);
+            fragment.appendChild(row);
+          });
+          DOM.tableBody.innerHTML = "";
+          DOM.tableBody.appendChild(fragment);
         }
-        
+
         function populateCards(divisionsToRender) {
-            const divisions = divisionsToRender || state.rootNode.children;
-            const fragment = document.createDocumentFragment();
+          const divisions = divisionsToRender || state.rootNode.children;
+          const fragment = document.createDocumentFragment();
 
-            divisions.forEach(division => {
-                const card = document.createElement('div');
-                card.className = 'division-card';
-                card.dataset.code = division.data.code;
-                
-                const leafNodes = division.descendants().filter(d => !d.children && !d._children);
-                const totalEmployees = d3.sum(leafNodes, d => d.data.employees || 0);
+          divisions.forEach((division) => {
+            const card = document.createElement("div");
+            card.className = "division-card";
+            card.dataset.code = division.data.code;
 
-                card.innerHTML = `
+            const leafNodes = division.descendants().filter((d) => !d.children && !d._children);
+            const totalEmployees = d3.sum(leafNodes, (d) => d.data.employees || 0);
+
+            card.innerHTML = `
                     <div class="division-header">
                         <div class="division-title">${division.data.name}</div>
                         <div class="occupation-count">${leafNodes.length} ocupaciones</div>
                     </div>
-                    <p><strong>Salario Promedio:</strong> ${division.data.avgSalary?.toLocaleString() || 'N/A'} MXN</p>
+                    <p><strong>Salario Promedio:</strong> ${division.data.avgSalary?.toLocaleString() || "N/A"} MXN</p>
                     <p><strong>Total Empleados:</strong> ${totalEmployees.toLocaleString()}</p>
-                    <p><strong>Formalidad Promedio:</strong> ${division.data.formality || 'N/A'}%</p>
+                    <p><strong>Formalidad Promedio:</strong> ${division.data.formality || "N/A"}%</p>
                 `;
-                fragment.appendChild(card);
-            });
-            DOM.cardsContainer.innerHTML = '';
-            DOM.cardsContainer.appendChild(fragment);
+            fragment.appendChild(card);
+          });
+          DOM.cardsContainer.innerHTML = "";
+          DOM.cardsContainer.appendChild(fragment);
         }
 
         // --- EVENT HANDLERS --- //
 
         function handleViewSwitch(e) {
-            const button = e.target.closest('.view-btn');
-            if (!button || button.classList.contains('active')) return;
+          const button = e.target.closest(".view-btn");
+          if (!button || button.classList.contains("active")) return;
 
-            state.currentView = button.dataset.view;
-            DOM.viewToggle.querySelector('.active').classList.remove('active');
-            button.classList.add('active');
+          state.currentView = button.dataset.view;
+          DOM.viewToggle.querySelector(".active").classList.remove("active");
+          button.classList.add("active");
 
-            [DOM.treeView, DOM.tableView, DOM.cardsView].forEach(view => view.classList.add('hidden'));
-            document.getElementById(`${state.currentView}View`).classList.remove('hidden');
-            
-            if (state.currentView === 'table' && DOM.tableBody.childElementCount === 0) populateTable();
-            if (state.currentView === 'cards' && DOM.cardsContainer.childElementCount === 0) populateCards();
-            
-            handleSearch();
+          [DOM.treeView, DOM.tableView, DOM.cardsView].forEach((view) =>
+            view.classList.add("hidden")
+          );
+          document.getElementById(`${state.currentView}View`).classList.remove("hidden");
+
+          if (state.currentView === "table" && DOM.tableBody.childElementCount === 0) {
+            populateTable();
+          }
+          if (state.currentView === "cards" && DOM.cardsContainer.childElementCount === 0) {
+            populateCards();
+          }
+
+          handleSearch();
         }
-        
+
         function handleNodeClick(event, d) {
-            if (d.children) {
-                d._children = d.children;
-                d.children = null;
-            } else {
-                d.children = d._children;
-                d._children = null;
-            }
-            updateTree(d);
+          if (d.children) {
+            d._children = d.children;
+            d.children = null;
+          } else {
+            d.children = d._children;
+            d._children = null;
+          }
+          updateTree(d);
         }
 
         function handleSearch() {
-            const searchTerm = DOM.searchInput.value.toLowerCase().trim();
-            d3.selectAll('.node.search-highlight').classed('search-highlight', false);
+          const searchTerm = DOM.searchInput.value.toLowerCase().trim();
+          d3.selectAll(".node.search-highlight").classed("search-highlight", false);
 
-            if (state.currentView === 'tree') {
-                if (!searchTerm) return;
-                const matchingNodes = state.allNodes.filter(node => 
-                    node.data.name.toLowerCase().includes(searchTerm) ||
-                    node.data.code.toLowerCase().includes(searchTerm)
-                );
-                if (matchingNodes.length > 0) {
-                    expandPathToNode(matchingNodes[0]);
-                    centerNode(matchingNodes[0]);
-                    matchingNodes.forEach(node => {
-                        d3.selectAll("g.node").filter(d => d.id === node.id).classed('search-highlight', true);
-                    });
-                }
-            } else {
-                const results = state.allNodes.filter(node => 
-                    node.depth > 0 && (
-                        node.data.name.toLowerCase().includes(searchTerm) ||
-                        node.data.code.toLowerCase().includes(searchTerm) ||
-                        String(node.data.avgSalary).includes(searchTerm)
-                    )
-                );
-                if (state.currentView === 'table') {
-                    populateTable(results);
-                } else if (state.currentView === 'cards') {
-                    const divisionCodes = new Set(results.map(n => n.ancestors()[1]?.data.code).filter(Boolean));
-                    const divisionNodes = state.rootNode.children.filter(d => divisionCodes.has(d.data.code));
-                    populateCards(divisionNodes);
-                }
+          if (state.currentView === "tree") {
+            if (!searchTerm) return;
+            const matchingNodes = state.allNodes.filter(
+              (node) =>
+                node.data.name.toLowerCase().includes(searchTerm) ||
+                node.data.code.toLowerCase().includes(searchTerm)
+            );
+            if (matchingNodes.length > 0) {
+              expandPathToNode(matchingNodes[0]);
+              centerNode(matchingNodes[0]);
+              matchingNodes.forEach((node) => {
+                d3.selectAll("g.node")
+                  .filter((d) => d.id === node.id)
+                  .classed("search-highlight", true);
+              });
             }
+          } else {
+            const results = state.allNodes.filter(
+              (node) =>
+                node.depth > 0 &&
+                (node.data.name.toLowerCase().includes(searchTerm) ||
+                  node.data.code.toLowerCase().includes(searchTerm) ||
+                  String(node.data.avgSalary).includes(searchTerm))
+            );
+            if (state.currentView === "table") {
+              populateTable(results);
+            } else if (state.currentView === "cards") {
+              const divisionCodes = new Set(
+                results.map((n) => n.ancestors()[1]?.data.code).filter(Boolean)
+              );
+              const divisionNodes = state.rootNode.children.filter((d) =>
+                divisionCodes.has(d.data.code)
+              );
+              populateCards(divisionNodes);
+            }
+          }
         }
 
         function switchViewAndHighlight(code) {
-            const node = state.allNodes.find(n => n.data.code === code);
-            if (!node) return;
+          const node = state.allNodes.find((n) => n.data.code === code);
+          if (!node) return;
 
-            // Switch to tree view if not already there
-            if (state.currentView !== 'tree') {
-                document.querySelector(`.view-btn[data-view="tree"]`).click();
-            }
+          // Switch to tree view if not already there
+          if (state.currentView !== "tree") {
+            document.querySelector(`.view-btn[data-view="tree"]`).click();
+          }
 
-            // Defer the highlight to ensure view has switched
-            setTimeout(() => {
-                expandPathToNode(node);
-                centerNode(node);
-                d3.selectAll('.node.search-highlight').classed('search-highlight', false);
-                d3.selectAll("g.node").filter(d => d.id === node.id).classed('search-highlight', true);
-            }, 100);
+          // Defer the highlight to ensure view has switched
+          setTimeout(() => {
+            expandPathToNode(node);
+            centerNode(node);
+            d3.selectAll(".node.search-highlight").classed("search-highlight", false);
+            d3.selectAll("g.node")
+              .filter((d) => d.id === node.id)
+              .classed("search-highlight", true);
+          }, 100);
         }
-        
+
         function expandPathToNode(node) {
-            node.ancestors().forEach(ancestor => {
-                if (ancestor._children) {
-                    ancestor.children = ancestor._children;
-                    ancestor._children = null;
-                }
-            });
-            updateTree(node);
+          node.ancestors().forEach((ancestor) => {
+            if (ancestor._children) {
+              ancestor.children = ancestor._children;
+              ancestor._children = null;
+            }
+          });
+          updateTree(node);
         }
 
         function centerNode(node) {
-            const { width, height } = DOM.treeView.getBoundingClientRect();
-            const transform = d3.zoomIdentity
-                .translate(width / 2, height / 2)
-                .scale(1.2)
-                .translate(-node.y, -node.x);
-            
-            state.d3.svg.transition().duration(750).call(state.d3.zoom.transform, transform);
+          const { width, height } = DOM.treeView.getBoundingClientRect();
+          const transform = d3.zoomIdentity
+            .translate(width / 2, height / 2)
+            .scale(1.2)
+            .translate(-node.y, -node.x);
+
+          state.d3.svg.transition().duration(750).call(state.d3.zoom.transform, transform);
         }
 
         function handleResize() {
-            if (state.currentView !== 'tree') return;
-            const { width, height } = DOM.treeView.getBoundingClientRect();
-            state.d3.svg.attr("width", width).attr("height", height).attr("viewBox", `0 0 ${width} ${height}`);
-            state.d3.treeLayout.size([height, width - 200]);
-            updateTree(state.rootNode);
+          if (state.currentView !== "tree") return;
+          const { width, height } = DOM.treeView.getBoundingClientRect();
+          state.d3.svg
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", `0 0 ${width} ${height}`);
+          state.d3.treeLayout.size([height, width - 200]);
+          updateTree(state.rootNode);
         }
 
         // --- Tooltip Handlers --- //
         function handleMouseOver(event, d) {
-            DOM.tooltip.style.opacity = 1;
-            DOM.tooltip.innerHTML = `
+          DOM.tooltip.style.opacity = 1;
+          DOM.tooltip.innerHTML = `
                 <h3>${d.data.name}</h3>
                 <p><strong>Código:</strong> ${d.data.code}</p>
                 <p><strong>Nivel:</strong> ${getOccupationLevel(d.data.code)}</p>
-                <p><strong>Salario Promedio:</strong> ${d.data.avgSalary?.toLocaleString() || 'N/A'} MXN</p>
-                <p><strong>Formalidad:</strong> ${d.data.formality || 'N/A'}%</p>
-                <p><strong>Empleados:</strong> ${d.data.employees?.toLocaleString() || 'N/A'}</p>
+                <p><strong>Salario Promedio:</strong> ${d.data.avgSalary?.toLocaleString() || "N/A"} MXN</p>
+                <p><strong>Formalidad:</strong> ${d.data.formality || "N/A"}%</p>
+                <p><strong>Empleados:</strong> ${d.data.employees?.toLocaleString() || "N/A"}</p>
             `;
-            d3.select(event.currentTarget).classed('highlight', true);
+          d3.select(event.currentTarget).classed("highlight", true);
         }
 
         function handleMouseMove(event) {
-            DOM.tooltip.style.left = `${event.clientX + 15}px`;
-            DOM.tooltip.style.top = `${event.clientY + 15}px`;
+          DOM.tooltip.style.left = `${event.clientX + 15}px`;
+          DOM.tooltip.style.top = `${event.clientY + 15}px`;
         }
 
         function handleMouseOut(event, d) {
-            DOM.tooltip.style.opacity = 0;
-            d3.select(event.currentTarget).classed('highlight', false);
+          DOM.tooltip.style.opacity = 0;
+          d3.select(event.currentTarget).classed("highlight", false);
         }
 
         // Start the application once the DOM is fully loaded.
-        document.addEventListener('DOMContentLoaded', init);
-
-    })();
+        document.addEventListener("DOMContentLoaded", init);
+      })();
     </script>
-</body>
+  </body>
 </html>
