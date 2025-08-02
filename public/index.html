@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sistema Nacional de Clasificación de Ocupaciones (SINCO) 2019 - México</title>
+    <title id="appTitle">SINCO 2019 - Sistema Nacional de Clasificación de Ocupaciones</title>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' https://cdnjs.cloudflare.com; connect-src 'self';" />
 
     <!-- D3.js Library -->
@@ -427,8 +427,8 @@
     </style>
   </head>
   <body>
-    <div class="header">
-      <h1>SINCO 2019 - Sistema Nacional de Clasificación de Ocupaciones</h1>
+    <div class="header" role="banner">
+      <h1 id="pageHeading">SINCO 2019 - Sistema Nacional de Clasificación de Ocupaciones</h1>
       <div class="stats-bar">
         <div class="stat-item">
           <div class="stat-label">Total Ocupaciones</div>
@@ -471,7 +471,7 @@
       </div>
 
       <div class="controls-row">
-        <div class="view-toggle">
+        <div class="view-toggle" aria-label="Cambiar vista" role="tablist">
           <button id="btn-tree" class="view-btn active" data-view="tree" role="tab" aria-selected="true" aria-controls="treeView">Árbol</button>
           <button id="btn-table" class="view-btn" data-view="table" role="tab" aria-selected="false" aria-controls="tableView">Tabla</button>
           <button id="btn-cards" class="view-btn" data-view="cards" role="tab" aria-selected="false" aria-controls="cardsView">Tarjetas</button>
@@ -479,7 +479,7 @@
       </div>
     </div>
 
-    <div class="content">
+    <div class="content" role="main" aria-labelledby="pageHeading">
       <div id="treeView" class="tree-view" role="tabpanel" aria-labelledby="btn-tree">
         <svg id="treeSvg" role="img" aria-label="Árbol de ocupaciones"></svg>
       </div>

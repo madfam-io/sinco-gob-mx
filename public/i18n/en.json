@@ -1,0 +1,11 @@
+{
+  "app.title": "SINCO 2019 - National Classification of Occupations",
+  "search.placeholder": "Search occupation, code or salary...",
+  "stats.totalOccupations": "Total Occupations",
+  "stats.divisions": "Divisions",
+  "stats.totalEmployees": "Total Employees",
+  "stats.avgSalary": "Average Salary",
+  "views.tree": "Tree",
+  "views.table": "Table",
+  "views.cards": "Cards"
+}
