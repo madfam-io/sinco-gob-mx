@@ -1,6 +1,6 @@
 module.exports = [
   {
-    files: ["**/*.js"],
+    files: ["src/**/*.js", "public/**/*.js", "scripts/**/*.mjs", "tests/**/*.js"],
     ignores: ["node_modules/**", "dist/**", "build/**"],
     languageOptions: {
       ecmaVersion: 2022,

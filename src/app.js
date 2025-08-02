@@ -65,16 +65,12 @@ import * as d3 from "d3";
     const h = container.clientHeight;
     if (!w || !h) return;
     state.d3.svg = DOM.treeSvg.attr("width", w).attr("height", h).attr("viewBox", `0 0 ${w} ${h}`);
-    state.d3.svg = DOM.treeSvg
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", `0 0 ${width} ${height}`);
     state.d3.g = state.d3.svg.append("g").attr("transform", "translate(80,0)");
     state.d3.treeLayout = d3.tree().size([h, w - 200]);
     state.rootNode = d3.hierarchy(sincoData, (d) => d.children);
-    state.rootNode.x0 = height / 2;
+    state.rootNode.x0 = h / 2;
     state.rootNode.y0 = 0;
-    state.rootNode.children.forEach(collapse);
+    if (state.rootNode.children) state.rootNode.children.forEach(collapse);
     updateTree(state.rootNode);
     setupZoom();
   }
@@ -183,7 +179,6 @@ import * as d3 from "d3";
     state.d3.svg.call(state.d3.zoom);
   }
   function resetZoom() {
-    const { clientWidth: width, clientHeight: height } = DOM.treeView;
     const transform = d3.zoomIdentity.translate(80, 0);
     state.d3.svg.transition().duration(500).call(state.d3.zoom.transform, transform);
   }

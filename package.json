@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "http-server -p 8000",
     "start": "npm run serve",
-    "lint": "eslint . --ext .js --ignore-pattern dist/**",
+    "lint": "eslint src public scripts --ext .js,.mjs",
     "format": "prettier --write .",
     "check:format": "prettier --check .",
     "check:links": "npx -y linkinator http://localhost:8000 --silent || true",
