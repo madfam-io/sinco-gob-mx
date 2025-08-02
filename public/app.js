@@ -41,11 +41,11 @@
       const sincoData = await response.json();
       setupD3(sincoData);
       processData();
-      updateStats();
+      updateStatsFromData(sincoData);
       setupEventListeners();
     } catch (error) {
       console.error("Failed to load and initialize SINCO data:", error);
-      DOM.loader.innerHTML = `<p style="color:white;">Error al cargar los datos. Por favor, intente de nuevo más tarde.</p>`;
+      DOM.loader.innerHTML = `<p style=\"color:white;\">Error al cargar los datos. Por favor, intente de nuevo más tarde.</p>`;
     } finally {
       setTimeout(() => {
         DOM.loader.style.opacity = "0";
