@@ -27,4 +27,4 @@ jobs:
           node-version: 20
       - run: npm ci --ignore-scripts
       - run: npx http-server -p 8000 dist &
-      - run: npx -y wait-on http://127.0.0.1:8000 && npx -y @lhci/cli autorun --collect.url=http://127.0.0.1:8000 --upload.target=temporary-public-storage
+      - run: npx -y wait-on tcp:127.0.0.1:8000 && npx -y wait-on http-get://127.0.0.1:8000/index.html && npx -y @lhci/cli autorun --collect.url=http://127.0.0.1:8000 --upload.target=temporary-public-storage
