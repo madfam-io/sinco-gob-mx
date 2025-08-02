@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistema Nacional de Clasificación de Ocupaciones (SINCO) 2019 - México</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' https://cdnjs.cloudflare.com; connect-src 'self';" />
 
     <!-- D3.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -449,8 +450,8 @@
     </div>
 
     <div class="controls">
-      <div class="search-box">
-        <span class="search-icon">
+      <div class="search-box" role="search">
+        <span class="search-icon" aria-hidden="true">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -466,23 +467,23 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </span>
-        <input type="text" id="searchInput" placeholder="Buscar ocupación, código o salario..." />
+        <input type="text" id="searchInput" placeholder="Buscar ocupación, código o salario..." aria-label="Buscar ocupación, código o salario" />
       </div>
 
       <div class="controls-row">
         <div class="view-toggle">
-          <button id="btn-tree" class="view-btn active" data-view="tree">Árbol</button>
-          <button id="btn-table" class="view-btn" data-view="table">Tabla</button>
-          <button id="btn-cards" class="view-btn" data-view="cards">Tarjetas</button>
+          <button id="btn-tree" class="view-btn active" data-view="tree" role="tab" aria-selected="true" aria-controls="treeView">Árbol</button>
+          <button id="btn-table" class="view-btn" data-view="table" role="tab" aria-selected="false" aria-controls="tableView">Tabla</button>
+          <button id="btn-cards" class="view-btn" data-view="cards" role="tab" aria-selected="false" aria-controls="cardsView">Tarjetas</button>
         </div>
       </div>
     </div>
 
     <div class="content">
-      <div id="treeView" class="tree-view">
-        <svg id="treeSvg"></svg>
+      <div id="treeView" class="tree-view" role="tabpanel" aria-labelledby="btn-tree">
+        <svg id="treeSvg" role="img" aria-label="Árbol de ocupaciones"></svg>
       </div>
-      <div id="tableView" class="table-view hidden">
+      <div id="tableView" class="table-view hidden" role="tabpanel" aria-labelledby="btn-table">
         <div class="table-container">
           <table>
             <thead>
@@ -499,10 +500,10 @@
           </table>
         </div>
       </div>
-      <div id="cardsView" class="cards-view hidden"></div>
+      <div id="cardsView" class="cards-view hidden" role="tabpanel" aria-labelledby="btn-cards"></div>
     </div>
 
-    <div class="tooltip" id="tooltip"></div>
+    <div class="tooltip" id="tooltip" role="dialog" aria-live="polite" aria-hidden="true"></div>
     <div class="loader" id="loader">
       <div class="loader-circle"></div>
     </div>
@@ -981,6 +982,7 @@
         // --- Tooltip Handlers --- //
         function handleMouseOver(event, d) {
           DOM.tooltip.style.opacity = 1;
+          DOM.tooltip.setAttribute('aria-hidden', 'false');
           DOM.tooltip.innerHTML = `
                 <h3>${d.data.name}</h3>
                 <p><strong>Código:</strong> ${d.data.code}</p>
@@ -999,6 +1001,7 @@
 
         function handleMouseOut(event, d) {
           DOM.tooltip.style.opacity = 0;
+          DOM.tooltip.setAttribute('aria-hidden', 'true');
           d3.select(event.currentTarget).classed("highlight", false);
         }
 
