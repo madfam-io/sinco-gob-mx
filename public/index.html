@@ -477,6 +477,13 @@
           <button id="btn-cards" class="view-btn" data-view="cards" role="tab" aria-selected="false" aria-controls="cardsView">Tarjetas</button>
         </div>
       </div>
+      <div class="controls-row" style="margin-top:0.5rem">
+        <label for="langSelect" class="stat-label" style="margin-right:0.5rem">Idioma</label>
+        <select id="langSelect" aria-label="Seleccionar idioma">
+          <option value="es">ES</option>
+          <option value="en">EN</option>
+        </select>
+      </div>
     </div>
 
     <div class="content" role="main" aria-labelledby="pageHeading">
@@ -1009,5 +1016,6 @@
         document.addEventListener("DOMContentLoaded", init);
       })();
     </script>
+    <script src="/i18n/i18n.js"></script>
   </body>
 </html>
