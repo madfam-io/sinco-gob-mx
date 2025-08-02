@@ -1,0 +1,1430 @@
+// SINCO Data Structure with real salary information from research
+const sincoData = {
+    name: "SINCO 2019",
+    code: "0",
+    children: [
+        {
+            name: "División 1: Funcionarios, directores y jefes",
+            code: "1",
+            avgSalary: 25000,
+            formality: 95,
+            employees: 850000,
+            children: [
+                {
+                    name: "11 - Funcionarios y altas autoridades de los sectores público, privado y social",
+                    code: "11",
+                    avgSalary: 45000,
+                    formality: 100,
+                    employees: 120000,
+                    children: [
+                        {
+                            name: "111 - Funcionarios del poder ejecutivo, legislativo y judicial",
+                            code: "111",
+                            avgSalary: 55000,
+                            formality: 100,
+                            employees: 45000,
+                            children: [
+                                {name: "1111 - Legisladores", code: "1111", avgSalary: 60000, formality: 100, employees: 5000},
+                                {name: "1112 - Presidentes municipales y funcionarios", code: "1112", avgSalary: 55000, formality: 100, employees: 8000},
+                                {name: "1113 - Funcionarios de organismos autónomos", code: "1113", avgSalary: 58000, formality: 100, employees: 6000},
+                                {name: "1114 - Magistrados y jueces", code: "1114", avgSalary: 65000, formality: 100, employees: 12000},
+                                {name: "1119 - Otros funcionarios gubernamentales", code: "1119", avgSalary: 50000, formality: 100, employees: 14000}
+                            ]
+                        },
+                        {
+                            name: "112 - Presidentes y directores generales",
+                            code: "112",
+                            avgSalary: 65000,
+                            formality: 100,
+                            employees: 35000,
+                            children: [
+                                {name: "1121 - Directores generales en servicios financieros", code: "1121", avgSalary: 80000, formality: 100, employees: 8000},
+                                {name: "1122 - Directores generales en servicios de salud", code: "1122", avgSalary: 60000, formality: 100, employees: 5000},
+                                {name: "1123 - Directores generales en servicios educativos", code: "1123", avgSalary: 55000, formality: 100, employees: 7000},
+                                {name: "1124 - Directores generales en manufactura", code: "1124", avgSalary: 70000, formality: 100, employees: 10000},
+                                {name: "1129 - Otros directores generales", code: "1129", avgSalary: 60000, formality: 100, employees: 5000}
+                            ]
+                        },
+                        {
+                            name: "113 - Directores de organizaciones políticas y civiles",
+                            code: "113",
+                            avgSalary: 40000,
+                            formality: 95,
+                            employees: 40000
+                        }
+                    ]
+                },
+                {
+                    name: "12 - Directores y gerentes en servicios financieros, administrativos y sociales",
+                    code: "12",
+                    avgSalary: 35000,
+                    formality: 98,
+                    employees: 400000,
+                    children: [
+                        {
+                            name: "121 - Directores y gerentes en servicios contables y financieros",
+                            code: "121",
+                            avgSalary: 45000,
+                            formality: 99,
+                            employees: 120000,
+                            children: [
+                                {name: "1211 - Directores de finanzas", code: "1211", avgSalary: 50000, formality: 99, employees: 25000},
+                                {name: "1212 - Gerentes de contabilidad y auditoría", code: "1212", avgSalary: 42000, formality: 99, employees: 35000},
+                                {name: "1213 - Gerentes de análisis financiero", code: "1213", avgSalary: 48000, formality: 99, employees: 20000},
+                                {name: "1214 - Gerentes de crédito y cobranza", code: "1214", avgSalary: 38000, formality: 98, employees: 30000},
+                                {name: "1219 - Otros gerentes en servicios financieros", code: "1219", avgSalary: 40000, formality: 98, employees: 10000}
+                            ]
+                        },
+                        {
+                            name: "122 - Directores y gerentes en servicios de salud, enseñanza y sociales",
+                            code: "122",
+                            avgSalary: 32000,
+                            formality: 96,
+                            employees: 150000
+                        },
+                        {
+                            name: "123 - Directores y gerentes de ventas, mercadotecnia y publicidad",
+                            code: "123",
+                            avgSalary: 38000,
+                            formality: 97,
+                            employees: 130000
+                        }
+                    ]
+                },
+                {
+                    name: "13 - Directores y gerentes en producción, tecnología y transporte",
+                    code: "13",
+                    avgSalary: 32000,
+                    formality: 96,
+                    employees: 330000,
+                    children: [
+                        {
+                            name: "131 - Directores y gerentes en producción agropecuaria, industrial y construcción",
+                            code: "131",
+                            avgSalary: 35000,
+                            formality: 95,
+                            employees: 180000
+                        },
+                        {
+                            name: "132 - Directores y gerentes en informática",
+                            code: "132",
+                            avgSalary: 42000,
+                            formality: 98,
+                            employees: 80000
+                        },
+                        {
+                            name: "133 - Directores y gerentes en transporte y comunicaciones",
+                            code: "133",
+                            avgSalary: 30000,
+                            formality: 94,
+                            employees: 70000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "División 2: Profesionistas y técnicos",
+            code: "2",
+            avgSalary: 17741,
+            formality: 85.5,
+            employees: 9400000,
+            children: [
+                {
+                    name: "21 - Especialistas en ciencias económico-administrativas, ciencias sociales, humanistas y en artes",
+                    code: "21",
+                    avgSalary: 16500,
+                    formality: 82,
+                    employees: 2800000,
+                    children: [
+                        {
+                            name: "211 - Economistas, consultores e investigadores en política",
+                            code: "211",
+                            avgSalary: 22000,
+                            formality: 88,
+                            employees: 180000,
+                            children: [
+                                {name: "2111 - Economistas", code: "2111", avgSalary: 24000, formality: 90, employees: 60000},
+                                {name: "2112 - Consultores en políticas públicas", code: "2112", avgSalary: 23000, formality: 88, employees: 45000},
+                                {name: "2113 - Investigadores en ciencias políticas", code: "2113", avgSalary: 20000, formality: 87, employees: 35000},
+                                {name: "2114 - Analistas de mercado", code: "2114", avgSalary: 21000, formality: 86, employees: 40000}
+                            ]
+                        },
+                        {
+                            name: "212 - Administradores y mercadólogos",
+                            code: "212",
+                            avgSalary: 17000,
+                            formality: 85,
+                            employees: 1059058,
+                            children: [
+                                {name: "2121 - Administradores de empresas", code: "2121", avgSalary: 18000, formality: 86, employees: 450000},
+                                {name: "2122 - Especialistas en comercialización", code: "2122", avgSalary: 16500, formality: 84, employees: 280000},
+                                {name: "2123 - Especialistas en recursos humanos", code: "2123", avgSalary: 17500, formality: 87, employees: 200000},
+                                {name: "2124 - Especialistas en relaciones públicas", code: "2124", avgSalary: 16000, formality: 83, employees: 129058}
+                            ]
+                        },
+                        {
+                            name: "213 - Contadores y auditores",
+                            code: "213",
+                            avgSalary: 15000,
+                            formality: 88,
+                            employees: 737344,
+                            children: [
+                                {name: "2131 - Contadores", code: "2131", avgSalary: 14500, formality: 87, employees: 400000},
+                                {name: "2132 - Auditores", code: "2132", avgSalary: 16500, formality: 90, employees: 200000},
+                                {name: "2133 - Fiscalistas", code: "2133", avgSalary: 17000, formality: 89, employees: 137344}
+                            ]
+                        },
+                        {
+                            name: "214 - Abogados",
+                            code: "214",
+                            avgSalary: 18000,
+                            formality: 82,
+                            employees: 728621,
+                            children: [
+                                {name: "2141 - Abogados litigantes", code: "2141", avgSalary: 16000, formality: 78, employees: 350000},
+                                {name: "2142 - Abogados corporativos", code: "2142", avgSalary: 22000, formality: 90, employees: 200000},
+                                {name: "2143 - Notarios y actuarios", code: "2143", avgSalary: 25000, formality: 95, employees: 50000},
+                                {name: "2144 - Defensores públicos", code: "2144", avgSalary: 14000, formality: 85, employees: 128621}
+                            ]
+                        },
+                        {
+                            name: "215 - Psicólogos, sociólogos y trabajadores sociales",
+                            code: "215",
+                            avgSalary: 12000,
+                            formality: 75,
+                            employees: 320000
+                        }
+                    ]
+                },
+                {
+                    name: "22 - Especialistas en ciencias exactas, físicas y biológicas",
+                    code: "22",
+                    avgSalary: 22000,
+                    formality: 90,
+                    employees: 800000,
+                    children: [
+                        {
+                            name: "221 - Físicos, químicos y profesionistas en ciencias atmosféricas",
+                            code: "221",
+                            avgSalary: 25626,
+                            formality: 92,
+                            employees: 120000,
+                            children: [
+                                {name: "2211 - Físicos", code: "2211", avgSalary: 26000, formality: 93, employees: 30000},
+                                {name: "2212 - Químicos", code: "2212", avgSalary: 24000, formality: 91, employees: 60000},
+                                {name: "2213 - Meteorólogos", code: "2213", avgSalary: 28000, formality: 94, employees: 15000},
+                                {name: "2214 - Geólogos", code: "2214", avgSalary: 27000, formality: 92, employees: 15000}
+                            ]
+                        },
+                        {
+                            name: "222 - Matemáticos, actuarios y estadísticos",
+                            code: "222",
+                            avgSalary: 25683,
+                            formality: 95,
+                            employees: 85000,
+                            children: [
+                                {name: "2221 - Matemáticos", code: "2221", avgSalary: 24000, formality: 94, employees: 20000},
+                                {name: "2222 - Actuarios", code: "2222", avgSalary: 28000, formality: 96, employees: 35000},
+                                {name: "2223 - Estadísticos", code: "2223", avgSalary: 25000, formality: 95, employees: 30000}
+                            ]
+                        },
+                        {
+                            name: "223 - Biólogos y profesionistas en ciencias del mar",
+                            code: "223",
+                            avgSalary: 18000,
+                            formality: 88,
+                            employees: 95000
+                        }
+                    ]
+                },
+                {
+                    name: "23 - Profesionistas en tecnología",
+                    code: "23",
+                    avgSalary: 19061,
+                    formality: 88,
+                    employees: 650000,
+                    children: [
+                        {
+                            name: "231 - Desarrolladores y analistas de software y multimedia",
+                            code: "231",
+                            avgSalary: 22000,
+                            formality: 90,
+                            employees: 380000,
+                            children: [
+                                {name: "2311 - Desarrolladores de software", code: "2311", avgSalary: 24000, formality: 91, employees: 200000},
+                                {name: "2312 - Desarrolladores web", code: "2312", avgSalary: 20000, formality: 88, employees: 100000},
+                                {name: "2313 - Desarrolladores de aplicaciones móviles", code: "2313", avgSalary: 22000, formality: 89, employees: 50000},
+                                {name: "2314 - Analistas de sistemas", code: "2314", avgSalary: 21000, formality: 90, employees: 30000}
+                            ]
+                        },
+                        {
+                            name: "232 - Especialistas en bases de datos y en redes de computadoras",
+                            code: "232",
+                            avgSalary: 20000,
+                            formality: 88,
+                            employees: 170000,
+                            children: [
+                                {name: "2321 - Administradores de bases de datos", code: "2321", avgSalary: 21000, formality: 89, employees: 60000},
+                                {name: "2322 - Administradores de redes", code: "2322", avgSalary: 19000, formality: 88, employees: 70000},
+                                {name: "2323 - Especialistas en seguridad informática", code: "2323", avgSalary: 23000, formality: 90, employees: 40000}
+                            ]
+                        },
+                        {
+                            name: "233 - Técnicos en informática",
+                            code: "233",
+                            avgSalary: 15000,
+                            formality: 85,
+                            employees: 100000
+                        }
+                    ]
+                },
+                {
+                    name: "24 - Profesionistas de las ingenierías",
+                    code: "24",
+                    avgSalary: 19725,
+                    formality: 88,
+                    employees: 2000000,
+                    children: [
+                        {
+                            name: "241 - Ingenieros civiles y de la construcción",
+                            code: "241",
+                            avgSalary: 18000,
+                            formality: 86,
+                            employees: 450000,
+                            children: [
+                                {name: "2411 - Ingenieros civiles", code: "2411", avgSalary: 19000, formality: 87, employees: 300000},
+                                {name: "2412 - Ingenieros en construcción", code: "2412", avgSalary: 17000, formality: 85, employees: 100000},
+                                {name: "2413 - Arquitectos", code: "2413", avgSalary: 16000, formality: 84, employees: 50000}
+                            ]
+                        },
+                        {
+                            name: "242 - Ingenieros electricistas, electrónicos y en telecomunicaciones",
+                            code: "242",
+                            avgSalary: 20000,
+                            formality: 89,
+                            employees: 380000,
+                            children: [
+                                {name: "2421 - Ingenieros electricistas", code: "2421", avgSalary: 19000, formality: 88, employees: 150000},
+                                {name: "2422 - Ingenieros electrónicos", code: "2422", avgSalary: 21000, formality: 90, employees: 130000},
+                                {name: "2423 - Ingenieros en telecomunicaciones", code: "2423", avgSalary: 22000, formality: 91, employees: 100000}
+                            ]
+                        },
+                        {
+                            name: "243 - Ingenieros industriales, mecánicos y químicos",
+                            code: "243",
+                            avgSalary: 21000,
+                            formality: 90,
+                            employees: 620000,
+                            children: [
+                                {name: "2431 - Ingenieros industriales", code: "2431", avgSalary: 20000, formality: 89, employees: 300000},
+                                {name: "2432 - Ingenieros mecánicos", code: "2432", avgSalary: 21000, formality: 90, employees: 200000},
+                                {name: "2433 - Ingenieros químicos", code: "2433", avgSalary: 23000, formality: 92, employees: 120000}
+                            ]
+                        },
+                        {
+                            name: "244 - Ingenieros en minas, metalurgia y petróleo",
+                            code: "244",
+                            avgSalary: 28000,
+                            formality: 94,
+                            employees: 120000
+                        },
+                        {
+                            name: "245 - Otros ingenieros",
+                            code: "245",
+                            avgSalary: 18000,
+                            formality: 87,
+                            employees: 430000
+                        }
+                    ]
+                },
+                {
+                    name: "25 - Auxiliares y técnicos en ciencias exactas, biológicas e ingenierías",
+                    code: "25",
+                    avgSalary: 12000,
+                    formality: 82,
+                    employees: 850000,
+                    children: [
+                        {
+                            name: "251 - Auxiliares en ciencias biológicas, químicas y del medio ambiente",
+                            code: "251",
+                            avgSalary: 10000,
+                            formality: 80,
+                            employees: 220000
+                        },
+                        {
+                            name: "252 - Dibujantes técnicos",
+                            code: "252",
+                            avgSalary: 11000,
+                            formality: 81,
+                            employees: 180000
+                        },
+                        {
+                            name: "253 - Técnicos en construcción y arquitectura",
+                            code: "253",
+                            avgSalary: 13000,
+                            formality: 83,
+                            employees: 250000
+                        },
+                        {
+                            name: "254 - Técnicos eléctricos, en electrónica y telecomunicaciones",
+                            code: "254",
+                            avgSalary: 14000,
+                            formality: 85,
+                            employees: 200000
+                        }
+                    ]
+                },
+                {
+                    name: "26 - Profesionistas de la salud",
+                    code: "26",
+                    avgSalary: 18000,
+                    formality: 92,
+                    employees: 1200000,
+                    children: [
+                        {
+                            name: "261 - Médicos",
+                            code: "261",
+                            avgSalary: 25000,
+                            formality: 94,
+                            employees: 400000,
+                            children: [
+                                {name: "2611 - Médicos generales", code: "2611", avgSalary: 20000, formality: 92, employees: 200000},
+                                {name: "2612 - Médicos especialistas", code: "2612", avgSalary: 35000, formality: 96, employees: 150000},
+                                {name: "2613 - Médicos residentes", code: "2613", avgSalary: 15000, formality: 95, employees: 50000}
+                            ]
+                        },
+                        {
+                            name: "262 - Dentistas",
+                            code: "262",
+                            avgSalary: 15000,
+                            formality: 88,
+                            employees: 180000
+                        },
+                        {
+                            name: "263 - Enfermeras",
+                            code: "263",
+                            avgSalary: 12000,
+                            formality: 90,
+                            employees: 450000,
+                            children: [
+                                {name: "2631 - Enfermeras profesionales", code: "2631", avgSalary: 14000, formality: 92, employees: 250000},
+                                {name: "2632 - Enfermeras técnicas", code: "2632", avgSalary: 10000, formality: 88, employees: 200000}
+                            ]
+                        },
+                        {
+                            name: "264 - Otros especialistas en salud",
+                            code: "264",
+                            avgSalary: 13000,
+                            formality: 89,
+                            employees: 170000
+                        }
+                    ]
+                },
+                {
+                    name: "27 - Profesionistas de la educación",
+                    code: "27",
+                    avgSalary: 14000,
+                    formality: 78,
+                    employees: 1800000,
+                    children: [
+                        {
+                            name: "271 - Profesores universitarios y de enseñanza superior",
+                            code: "271",
+                            avgSalary: 18000,
+                            formality: 85,
+                            employees: 350000
+                        },
+                        {
+                            name: "272 - Profesores de nivel medio y medio superior",
+                            code: "272",
+                            avgSalary: 15000,
+                            formality: 82,
+                            employees: 600000
+                        },
+                        {
+                            name: "273 - Profesores de enseñanza primaria",
+                            code: "273",
+                            avgSalary: 12000,
+                            formality: 75,
+                            employees: 650000
+                        },
+                        {
+                            name: "274 - Profesores de enseñanza preescolar",
+                            code: "274",
+                            avgSalary: 10000,
+                            formality: 72,
+                            employees: 200000
+                        }
+                    ]
+                },
+                {
+                    name: "28 - Profesionistas en formación artística, espectáculos y deportes",
+                    code: "28",
+                    avgSalary: 12000,
+                    formality: 65,
+                    employees: 400000,
+                    children: [
+                        {
+                            name: "281 - Artistas creativos e interpretativos",
+                            code: "281",
+                            avgSalary: 10000,
+                            formality: 55,
+                            employees: 150000
+                        },
+                        {
+                            name: "282 - Atletas y deportistas",
+                            code: "282",
+                            avgSalary: 15000,
+                            formality: 60,
+                            employees: 100000
+                        },
+                        {
+                            name: "283 - Productores y directores artísticos",
+                            code: "283",
+                            avgSalary: 18000,
+                            formality: 70,
+                            employees: 80000
+                        },
+                        {
+                            name: "284 - Técnicos en espectáculos",
+                            code: "284",
+                            avgSalary: 12000,
+                            formality: 68,
+                            employees: 70000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "División 3: Trabajadores auxiliares en actividades administrativas",
+            code: "3",
+            avgSalary: 8500,
+            formality: 75,
+            employees: 4500000,
+            children: [
+                {
+                    name: "31 - Supervisores de personal de apoyo administrativo",
+                    code: "31",
+                    avgSalary: 12000,
+                    formality: 85,
+                    employees: 500000,
+                    children: [
+                        {
+                            name: "311 - Supervisores de secretarias, capturistas y personal de archivo",
+                            code: "311",
+                            avgSalary: 13000,
+                            formality: 86,
+                            employees: 200000
+                        },
+                        {
+                            name: "312 - Supervisores de contabilidad y finanzas",
+                            code: "312",
+                            avgSalary: 14000,
+                            formality: 88,
+                            employees: 150000
+                        },
+                        {
+                            name: "313 - Supervisores de bibliotecas y archivos",
+                            code: "313",
+                            avgSalary: 11000,
+                            formality: 84,
+                            employees: 80000
+                        },
+                        {
+                            name: "314 - Supervisores de recepcionistas y mensajeros",
+                            code: "314",
+                            avgSalary: 10000,
+                            formality: 82,
+                            employees: 70000
+                        }
+                    ]
+                },
+                {
+                    name: "32 - Secretarias, capturistas, cajeros y trabajadores de control de archivo y transporte",
+                    code: "32",
+                    avgSalary: 8000,
+                    formality: 78,
+                    employees: 1800000,
+                    children: [
+                        {
+                            name: "321 - Secretarias",
+                            code: "321",
+                            avgSalary: 8500,
+                            formality: 80,
+                            employees: 600000,
+                            children: [
+                                {name: "3211 - Secretarias ejecutivas", code: "3211", avgSalary: 10000, formality: 85, employees: 200000},
+                                {name: "3212 - Secretarias", code: "3212", avgSalary: 8000, formality: 78, employees: 400000}
+                            ]
+                        },
+                        {
+                            name: "322 - Capturistas de datos",
+                            code: "322",
+                            avgSalary: 7000,
+                            formality: 75,
+                            employees: 400000
+                        },
+                        {
+                            name: "323 - Cajeros y cobradores",
+                            code: "323",
+                            avgSalary: 7500,
+                            formality: 77,
+                            employees: 500000
+                        },
+                        {
+                            name: "324 - Trabajadores de archivo",
+                            code: "324",
+                            avgSalary: 7000,
+                            formality: 76,
+                            employees: 300000
+                        }
+                    ]
+                },
+                {
+                    name: "33 - Asistentes y técnicos en contabilidad, economía, finanzas y agentes de bolsa",
+                    code: "33",
+                    avgSalary: 10000,
+                    formality: 82,
+                    employees: 800000,
+                    children: [
+                        {
+                            name: "331 - Asistentes contables y financieros",
+                            code: "331",
+                            avgSalary: 9500,
+                            formality: 81,
+                            employees: 400000
+                        },
+                        {
+                            name: "332 - Técnicos en contabilidad",
+                            code: "332",
+                            avgSalary: 10500,
+                            formality: 83,
+                            employees: 300000
+                        },
+                        {
+                            name: "333 - Agentes de bolsa y finanzas",
+                            code: "333",
+                            avgSalary: 12000,
+                            formality: 85,
+                            employees: 100000
+                        }
+                    ]
+                },
+                {
+                    name: "34 - Trabajadores de apoyo en actividades administrativas diversas",
+                    code: "34",
+                    avgSalary: 7500,
+                    formality: 70,
+                    employees: 900000,
+                    children: [
+                        {
+                            name: "341 - Asistentes administrativos",
+                            code: "341",
+                            avgSalary: 8000,
+                            formality: 72,
+                            employees: 500000
+                        },
+                        {
+                            name: "342 - Recepcionistas",
+                            code: "342",
+                            avgSalary: 7000,
+                            formality: 68,
+                            employees: 300000
+                        },
+                        {
+                            name: "343 - Mensajeros y repartidores",
+                            code: "343",
+                            avgSalary: 6500,
+                            formality: 65,
+                            employees: 100000
+                        }
+                    ]
+                },
+                {
+                    name: "35 - Trabajadores de apoyo en la educación",
+                    code: "35",
+                    avgSalary: 7000,
+                    formality: 68,
+                    employees: 500000
+                }
+            ]
+        },
+        {
+            name: "División 4: Comerciantes, empleados en ventas y agentes de ventas",
+            code: "4",
+            avgSalary: 7500,
+            formality: 45,
+            employees: 6510000,
+            children: [
+                {
+                    name: "41 - Comerciantes en establecimientos",
+                    code: "41",
+                    avgSalary: 8000,
+                    formality: 50,
+                    employees: 3000000,
+                    children: [
+                        {
+                            name: "411 - Comerciantes en tiendas de autoservicio",
+                            code: "411",
+                            avgSalary: 7500,
+                            formality: 60,
+                            employees: 800000
+                        },
+                        {
+                            name: "412 - Comerciantes en tiendas especializadas",
+                            code: "412",
+                            avgSalary: 8500,
+                            formality: 55,
+                            employees: 1200000
+                        },
+                        {
+                            name: "413 - Propietarios de pequeños comercios",
+                            code: "413",
+                            avgSalary: 9000,
+                            formality: 40,
+                            employees: 1000000
+                        }
+                    ]
+                },
+                {
+                    name: "42 - Empleados de ventas en establecimientos",
+                    code: "42",
+                    avgSalary: 6500,
+                    formality: 60,
+                    employees: 2500000,
+                    children: [
+                        {
+                            name: "421 - Vendedores en tiendas de autoservicio",
+                            code: "421",
+                            avgSalary: 6000,
+                            formality: 65,
+                            employees: 1000000,
+                            children: [
+                                {name: "4211 - Cajeros de tiendas de autoservicio", code: "4211", avgSalary: 6000, formality: 68, employees: 400000},
+                                {name: "4212 - Vendedores de piso", code: "4212", avgSalary: 5800, formality: 63, employees: 600000}
+                            ]
+                        },
+                        {
+                            name: "422 - Vendedores en tiendas especializadas",
+                            code: "422",
+                            avgSalary: 7000,
+                            formality: 58,
+                            employees: 900000
+                        },
+                        {
+                            name: "423 - Demostradores y promotores",
+                            code: "423",
+                            avgSalary: 6800,
+                            formality: 55,
+                            employees: 600000
+                        }
+                    ]
+                },
+                {
+                    name: "43 - Trabajadores en servicios personales y vendedores ambulantes",
+                    code: "43",
+                    avgSalary: 6000,
+                    formality: 35,
+                    employees: 1010000,
+                    children: [
+                        {
+                            name: "431 - Vendedores ambulantes de alimentos",
+                            code: "431",
+                            avgSalary: 5500,
+                            formality: 25,
+                            employees: 400000
+                        },
+                        {
+                            name: "432 - Vendedores ambulantes de mercancías",
+                            code: "432",
+                            avgSalary: 5800,
+                            formality: 30,
+                            employees: 350000
+                        },
+                        {
+                            name: "433 - Trabajadores en servicios personales diversos",
+                            code: "433",
+                            avgSalary: 6500,
+                            formality: 45,
+                            employees: 260000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "División 5: Trabajadores en servicios personales y vigilancia",
+            code: "5",
+            avgSalary: 6800,
+            formality: 55,
+            employees: 5200000,
+            children: [
+                {
+                    name: "51 - Trabajadores en servicios de alimentos y bebidas",
+                    code: "51",
+                    avgSalary: 6000,
+                    formality: 40,
+                    employees: 2100000,
+                    children: [
+                        {
+                            name: "511 - Cocineros",
+                            code: "511",
+                            avgSalary: 7000,
+                            formality: 45,
+                            employees: 800000,
+                            children: [
+                                {name: "5111 - Chefs y cocineros principales", code: "5111", avgSalary: 12000, formality: 60, employees: 100000},
+                                {name: "5112 - Cocineros", code: "5112", avgSalary: 6500, formality: 42, employees: 700000}
+                            ]
+                        },
+                        {
+                            name: "512 - Meseros y azafatas",
+                            code: "512",
+                            avgSalary: 5500,
+                            formality: 38,
+                            employees: 700000
+                        },
+                        {
+                            name: "513 - Cantineros y preparadores de bebidas",
+                            code: "513",
+                            avgSalary: 6000,
+                            formality: 40,
+                            employees: 300000
+                        },
+                        {
+                            name: "514 - Trabajadores de apoyo en preparación de alimentos",
+                            code: "514",
+                            avgSalary: 5000,
+                            formality: 35,
+                            employees: 300000
+                        }
+                    ]
+                },
+                {
+                    name: "52 - Trabajadores en cuidados personales y del hogar",
+                    code: "52",
+                    avgSalary: 5500,
+                    formality: 25,
+                    employees: 1800000,
+                    children: [
+                        {
+                            name: "521 - Peluqueros, barberos y especialistas en tratamientos de belleza",
+                            code: "521",
+                            avgSalary: 6500,
+                            formality: 30,
+                            employees: 400000
+                        },
+                        {
+                            name: "522 - Trabajadores domésticos",
+                            code: "522",
+                            avgSalary: 4500,
+                            formality: 15,
+                            employees: 800000
+                        },
+                        {
+                            name: "523 - Cuidadores de niños y ancianos",
+                            code: "523",
+                            avgSalary: 5000,
+                            formality: 20,
+                            employees: 400000
+                        },
+                        {
+                            name: "524 - Trabajadores de lavandería y tintorería",
+                            code: "524",
+                            avgSalary: 5500,
+                            formality: 35,
+                            employees: 200000
+                        }
+                    ]
+                },
+                {
+                    name: "53 - Trabajadores en servicios de protección y vigilancia",
+                    code: "53",
+                    avgSalary: 8500,
+                    formality: 70,
+                    employees: 1300000,
+                    children: [
+                        {
+                            name: "531 - Policías y agentes de tránsito",
+                            code: "531",
+                            avgSalary: 10000,
+                            formality: 90,
+                            employees: 400000
+                        },
+                        {
+                            name: "532 - Guardias de seguridad",
+                            code: "532",
+                            avgSalary: 7500,
+                            formality: 65,
+                            employees: 600000
+                        },
+                        {
+                            name: "533 - Vigilantes y porteros",
+                            code: "533",
+                            avgSalary: 6500,
+                            formality: 60,
+                            employees: 300000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "División 6: Trabajadores en actividades agrícolas, ganaderas, forestales, caza y pesca",
+            code: "6",
+            avgSalary: 4200,
+            formality: 5.4,
+            employees: 6400000,
+            children: [
+                {
+                    name: "61 - Trabajadores en actividades agrícolas",
+                    code: "61",
+                    avgSalary: 4000,
+                    formality: 5,
+                    employees: 4500000,
+                    children: [
+                        {
+                            name: "611 - Agricultores",
+                            code: "611",
+                            avgSalary: 4500,
+                            formality: 6,
+                            employees: 2000000,
+                            children: [
+                                {name: "6111 - Productores de maíz y frijol", code: "6111", avgSalary: 3800, formality: 4, employees: 800000},
+                                {name: "6112 - Productores de hortalizas", code: "6112", avgSalary: 4200, formality: 5, employees: 600000},
+                                {name: "6113 - Productores de frutas", code: "6113", avgSalary: 5000, formality: 7, employees: 400000},
+                                {name: "6114 - Productores de cultivos industriales", code: "6114", avgSalary: 5500, formality: 8, employees: 200000}
+                            ]
+                        },
+                        {
+                            name: "612 - Trabajadores agrícolas",
+                            code: "612",
+                            avgSalary: 3500,
+                            formality: 4,
+                            employees: 2500000,
+                            children: [
+                                {name: "6121 - Jornaleros agrícolas", code: "6121", avgSalary: 3200, formality: 3, employees: 1500000},
+                                {name: "6122 - Trabajadores en viveros e invernaderos", code: "6122", avgSalary: 3800, formality: 5, employees: 500000},
+                                {name: "6123 - Trabajadores en sistemas de riego", code: "6123", avgSalary: 4000, formality: 6, employees: 300000},
+                                {name: "6124 - Fumigadores y trabajadores en control de plagas", code: "6124", avgSalary: 4200, formality: 7, employees: 200000}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "62 - Trabajadores en actividades ganaderas",
+                    code: "62",
+                    avgSalary: 4500,
+                    formality: 6,
+                    employees: 1500000,
+                    children: [
+                        {
+                            name: "621 - Criadores de ganado bovino",
+                            code: "621",
+                            avgSalary: 5000,
+                            formality: 7,
+                            employees: 600000
+                        },
+                        {
+                            name: "622 - Criadores de ganado porcino y avícola",
+                            code: "622",
+                            avgSalary: 4500,
+                            formality: 6,
+                            employees: 500000
+                        },
+                        {
+                            name: "623 - Criadores de otros animales",
+                            code: "623",
+                            avgSalary: 4000,
+                            formality: 5,
+                            employees: 200000
+                        },
+                        {
+                            name: "624 - Trabajadores en cuidado de ganado",
+                            code: "624",
+                            avgSalary: 3800,
+                            formality: 4,
+                            employees: 200000
+                        }
+                    ]
+                },
+                {
+                    name: "63 - Trabajadores forestales, caza y pesca",
+                    code: "63",
+                    avgSalary: 4800,
+                    formality: 7,
+                    employees: 400000,
+                    children: [
+                        {
+                            name: "631 - Trabajadores forestales",
+                            code: "631",
+                            avgSalary: 4500,
+                            formality: 6,
+                            employees: 150000
+                        },
+                        {
+                            name: "632 - Pescadores",
+                            code: "632",
+                            avgSalary: 5200,
+                            formality: 8,
+                            employees: 200000
+                        },
+                        {
+                            name: "633 - Cazadores y tramperos",
+                            code: "633",
+                            avgSalary: 4000,
+                            formality: 5,
+                            employees: 50000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "División 7: Trabajadores artesanales, en la construcción y otros oficios",
+            code: "7",
+            avgSalary: 8200,
+            formality: 35,
+            employees: 8100000,
+            children: [
+                {
+                    name: "71 - Artesanos y trabajadores en la elaboración de productos de madera, papel, textiles y de cuero y piel",
+                    code: "71",
+                    avgSalary: 7000,
+                    formality: 25,
+                    employees: 1800000,
+                    children: [
+                        {
+                            name: "711 - Artesanos y trabajadores en la elaboración de productos de madera",
+                            code: "711",
+                            avgSalary: 7500,
+                            formality: 28,
+                            employees: 500000,
+                            children: [
+                                {name: "7111 - Carpinteros", code: "7111", avgSalary: 8000, formality: 30, employees: 300000},
+                                {name: "7112 - Ebanistas", code: "7112", avgSalary: 8500, formality: 32, employees: 100000},
+                                {name: "7113 - Trabajadores en la elaboración de productos de madera", code: "7113", avgSalary: 6500, formality: 25, employees: 100000}
+                            ]
+                        },
+                        {
+                            name: "712 - Artesanos y trabajadores de productos textiles",
+                            code: "712",
+                            avgSalary: 6500,
+                            formality: 22,
+                            employees: 700000
+                        },
+                        {
+                            name: "713 - Artesanos y trabajadores del cuero y piel",
+                            code: "713",
+                            avgSalary: 7000,
+                            formality: 25,
+                            employees: 400000
+                        },
+                        {
+                            name: "714 - Trabajadores en la elaboración de productos de papel",
+                            code: "714",
+                            avgSalary: 6800,
+                            formality: 27,
+                            employees: 200000
+                        }
+                    ]
+                },
+                {
+                    name: "72 - Trabajadores en la construcción, instalación y acabados",
+                    code: "72",
+                    avgSalary: 8500,
+                    formality: 30,
+                    employees: 3500000,
+                    children: [
+                        {
+                            name: "721 - Albañiles, mamposteros y afines",
+                            code: "721",
+                            avgSalary: 8000,
+                            formality: 28,
+                            employees: 1500000,
+                            children: [
+                                {name: "7211 - Albañiles", code: "7211", avgSalary: 7500, formality: 25, employees: 1000000},
+                                {name: "7212 - Mamposteros", code: "7212", avgSalary: 8500, formality: 30, employees: 300000},
+                                {name: "7213 - Trabajadores en cimentaciones", code: "7213", avgSalary: 9000, formality: 32, employees: 200000}
+                            ]
+                        },
+                        {
+                            name: "722 - Instaladores y trabajadores en acabados",
+                            code: "722",
+                            avgSalary: 9000,
+                            formality: 32,
+                            employees: 1200000,
+                            children: [
+                                {name: "7221 - Plomeros", code: "7221", avgSalary: 9500, formality: 35, employees: 400000},
+                                {name: "7222 - Electricistas", code: "7222", avgSalary: 10000, formality: 38, employees: 500000},
+                                {name: "7223 - Pintores", code: "7223", avgSalary: 7500, formality: 28, employees: 300000}
+                            ]
+                        },
+                        {
+                            name: "723 - Otros trabajadores de la construcción",
+                            code: "723",
+                            avgSalary: 8000,
+                            formality: 30,
+                            employees: 800000
+                        }
+                    ]
+                },
+                {
+                    name: "73 - Mecánicos y especialistas en mantenimiento y reparación",
+                    code: "73",
+                    avgSalary: 9500,
+                    formality: 45,
+                    employees: 2800000,
+                    children: [
+                        {
+                            name: "731 - Mecánicos automotrices",
+                            code: "731",
+                            avgSalary: 9000,
+                            formality: 42,
+                            employees: 1200000,
+                            children: [
+                                {name: "7311 - Mecánicos en mantenimiento y reparación de vehículos", code: "7311", avgSalary: 8500, formality: 40, employees: 800000},
+                                {name: "7312 - Hojalateros y pintores automotrices", code: "7312", avgSalary: 9000, formality: 42, employees: 300000},
+                                {name: "7313 - Electricistas automotrices", code: "7313", avgSalary: 10000, formality: 45, employees: 100000}
+                            ]
+                        },
+                        {
+                            name: "732 - Mecánicos industriales",
+                            code: "732",
+                            avgSalary: 11000,
+                            formality: 50,
+                            employees: 800000
+                        },
+                        {
+                            name: "733 - Técnicos en mantenimiento de equipos",
+                            code: "733",
+                            avgSalary: 10000,
+                            formality: 48,
+                            employees: 600000
+                        },
+                        {
+                            name: "734 - Herreros y soldadores",
+                            code: "734",
+                            avgSalary: 8500,
+                            formality: 40,
+                            employees: 200000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "División 8: Operadores de maquinaria industrial, ensambladores, choferes y conductores de transporte",
+            code: "8",
+            avgSalary: 9500,
+            formality: 65,
+            employees: 7200000,
+            children: [
+                {
+                    name: "81 - Operadores de instalaciones y máquinas industriales",
+                    code: "81",
+                    avgSalary: 10500,
+                    formality: 75,
+                    employees: 2800000,
+                    children: [
+                        {
+                            name: "811 - Operadores de máquinas para la elaboración de alimentos y bebidas",
+                            code: "811",
+                            avgSalary: 9500,
+                            formality: 73,
+                            employees: 600000
+                        },
+                        {
+                            name: "812 - Operadores de máquinas en la industria química",
+                            code: "812",
+                            avgSalary: 11000,
+                            formality: 78,
+                            employees: 400000
+                        },
+                        {
+                            name: "813 - Operadores de máquinas para productos metálicos",
+                            code: "813",
+                            avgSalary: 11500,
+                            formality: 76,
+                            employees: 800000
+                        },
+                        {
+                            name: "814 - Operadores de máquinas textiles",
+                            code: "814",
+                            avgSalary: 8500,
+                            formality: 72,
+                            employees: 500000
+                        },
+                        {
+                            name: "815 - Operadores de máquinas de impresión",
+                            code: "815",
+                            avgSalary: 10000,
+                            formality: 74,
+                            employees: 300000
+                        },
+                        {
+                            name: "819 - Otros operadores de maquinaria industrial",
+                            code: "819",
+                            avgSalary: 10000,
+                            formality: 75,
+                            employees: 200000
+                        }
+                    ]
+                },
+                {
+                    name: "82 - Ensambladores y montadores de herramientas, maquinaria, productos metálicos y electrónicos",
+                    code: "82",
+                    avgSalary: 8500,
+                    formality: 70,
+                    employees: 1900000,
+                    children: [
+                        {
+                            name: "821 - Ensambladores de productos metálicos",
+                            code: "821",
+                            avgSalary: 8000,
+                            formality: 68,
+                            employees: 500000
+                        },
+                        {
+                            name: "822 - Ensambladores de productos electrónicos",
+                            code: "822",
+                            avgSalary: 9000,
+                            formality: 72,
+                            employees: 800000
+                        },
+                        {
+                            name: "823 - Ensambladores de maquinaria y autopartes",
+                            code: "823",
+                            avgSalary: 8500,
+                            formality: 70,
+                            employees: 600000
+                        }
+                    ]
+                },
+                {
+                    name: "83 - Conductores de transporte y de maquinaria móvil",
+                    code: "83",
+                    avgSalary: 9000,
+                    formality: 55,
+                    employees: 2500000,
+                    children: [
+                        {
+                            name: "831 - Conductores de transporte terrestre con motor",
+                            code: "831",
+                            avgSalary: 8500,
+                            formality: 52,
+                            employees: 1800000,
+                            children: [
+                                {name: "8311 - Conductores de autobuses y microbuses", code: "8311", avgSalary: 8000, formality: 50, employees: 500000},
+                                {name: "8312 - Conductores de camiones", code: "8312", avgSalary: 9500, formality: 55, employees: 700000},
+                                {name: "8313 - Conductores de taxis", code: "8313", avgSalary: 7500, formality: 45, employees: 400000},
+                                {name: "8314 - Conductores de vehículos de reparto", code: "8314", avgSalary: 7000, formality: 48, employees: 200000}
+                            ]
+                        },
+                        {
+                            name: "832 - Operadores de maquinaria móvil",
+                            code: "832",
+                            avgSalary: 11000,
+                            formality: 65,
+                            employees: 500000
+                        },
+                        {
+                            name: "833 - Conductores de transporte en vías férreas",
+                            code: "833",
+                            avgSalary: 12000,
+                            formality: 85,
+                            employees: 50000
+                        },
+                        {
+                            name: "834 - Capitanes y marineros de embarcaciones",
+                            code: "834",
+                            avgSalary: 10000,
+                            formality: 60,
+                            employees: 150000
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "División 9: Trabajadores en actividades elementales y de apoyo",
+            code: "9",
+            avgSalary: 5200,
+            formality: 30,
+            employees: 8900000,
+            children: [
+                {
+                    name: "91 - Trabajadores de apoyo en actividades agropecuarias, forestales, pesca y caza",
+                    code: "91",
+                    avgSalary: 3800,
+                    formality: 10,
+                    employees: 2100000,
+                    children: [
+                        {
+                            name: "911 - Trabajadores de apoyo en actividades agrícolas",
+                            code: "911",
+                            avgSalary: 3500,
+                            formality: 8,
+                            employees: 1500000,
+                            children: [
+                                {name: "9111 - Peones de campo", code: "9111", avgSalary: 3200, formality: 5, employees: 800000},
+                                {name: "9112 - Recolectores de frutas y verduras", code: "9112", avgSalary: 3500, formality: 8, employees: 500000},
+                                {name: "9113 - Empacadores de productos agrícolas", code: "9113", avgSalary: 3800, formality: 10, employees: 200000}
+                            ]
+                        },
+                        {
+                            name: "912 - Trabajadores de apoyo en actividades ganaderas",
+                            code: "912",
+                            avgSalary: 4000,
+                            formality: 12,
+                            employees: 400000
+                        },
+                        {
+                            name: "913 - Trabajadores de apoyo en actividades forestales y pesca",
+                            code: "913",
+                            avgSalary: 4200,
+                            formality: 15,
+                            employees: 200000
+                        }
+                    ]
+                },
+                {
+                    name: "92 - Trabajadores de apoyo en la minería, construcción e industria",
+                    code: "92",
+                    avgSalary: 5500,
+                    formality: 35,
+                    employees: 1800000,
+                    children: [
+                        {
+                            name: "921 - Trabajadores de apoyo en la minería",
+                            code: "921",
+                            avgSalary: 6500,
+                            formality: 45,
+                            employees: 300000
+                        },
+                        {
+                            name: "922 - Trabajadores de apoyo en la construcción",
+                            code: "922",
+                            avgSalary: 5000,
+                            formality: 30,
+                            employees: 1000000
+                        },
+                        {
+                            name: "923 - Trabajadores de apoyo en la industria",
+                            code: "923",
+                            avgSalary: 5500,
+                            formality: 38,
+                            employees: 500000
+                        }
+                    ]
+                },
+                {
+                    name: "93 - Ayudantes de conductores, ayudantes en la elaboración de alimentos y similares",
+                    code: "93",
+                    avgSalary: 4800,
+                    formality: 25,
+                    employees: 1500000,
+                    children: [
+                        {
+                            name: "931 - Ayudantes de conductores",
+                            code: "931",
+                            avgSalary: 5000,
+                            formality: 28,
+                            employees: 400000
+                        },
+                        {
+                            name: "932 - Ayudantes en preparación de alimentos",
+                            code: "932",
+                            avgSalary: 4500,
+                            formality: 22,
+                            employees: 800000
+                        },
+                        {
+                            name: "933 - Lavaplatos",
+                            code: "933",
+                            avgSalary: 4200,
+                            formality: 20,
+                            employees: 300000
+                        }
+                    ]
+                },
+                {
+                    name: "94 - Vendedores ambulantes",
+                    code: "94",
+                    avgSalary: 4500,
+                    formality: 15,
+                    employees: 1900000,
+                    children: [
+                        {
+                            name: "941 - Vendedores ambulantes de alimentos",
+                            code: "941",
+                            avgSalary: 4800,
+                            formality: 12,
+                            employees: 800000
+                        },
+                        {
+                            name: "942 - Vendedores ambulantes de mercancías (excluyendo alimentos)",
+                            code: "942",
+                            avgSalary: 4200,
+                            formality: 15,
+                            employees: 700000
+                        },
+                        {
+                            name: "943 - Vendedores de billetes de lotería y pronósticos deportivos",
+                            code: "943",
+                            avgSalary: 4000,
+                            formality: 18,
+                            employees: 200000
+                        },
+                        {
+                            name: "944 - Trabajadores de paquetería y botones",
+                            code: "944",
+                            avgSalary: 4500,
+                            formality: 20,
+                            employees: 200000
+                        }
+                    ]
+                },
+                {
+                    name: "95 - Trabajadores domésticos, de limpieza, planchadores y otros trabajadores de limpieza",
+                    code: "95",
+                    avgSalary: 4200,
+                    formality: 20,
+                    employees: 1600000,
+                    children: [
+                        {
+                            name: "951 - Trabajadores domésticos",
+                            code: "951",
+                            avgSalary: 4000,
+                            formality: 15,
+                            employees: 800000
+                        },
+                        {
+                            name: "952 - Trabajadores de limpieza en establecimientos",
+                            code: "952",
+                            avgSalary: 4500,
+                            formality: 25,
+                            employees: 600000
+                        },
+                        {
+                            name: "953 - Lavadores de vehículos",
+                            code: "953",
+                            avgSalary: 3800,
+                            formality: 18,
+                            employees: 200000
+                        }
+                    ]
+                },
+                {
+                    name: "96 - Otros trabajadores en actividades elementales y de apoyo",
+                    code: "96",
+                    avgSalary: 5000,
+                    formality: 25,
+                    employees: 100000
+                }
+            ]
+        }
+    ]
+};
