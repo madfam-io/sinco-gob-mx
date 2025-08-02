@@ -5,6 +5,9 @@
     currentView: "tree",
     allNodes: [],
     rootNode: null,
+    pageSize: 25,
+    tablePage: 1,
+    cardsPage: 1,
     d3: {
       svg: null,
       g: null,
@@ -29,6 +32,13 @@
     statDivisions: document.getElementById("stat-divisions"),
     statTotalEmployees: document.getElementById("stat-total-employees"),
     statAvgSalary: document.getElementById("stat-avg-salary"),
+    tablePrev: document.getElementById("tablePrev"),
+    tableNext: document.getElementById("tableNext"),
+    tablePage: document.getElementById("tablePage"),
+    cardsPrev: document.getElementById("cardsPrev"),
+    cardsNext: document.getElementById("cardsNext"),
+    cardsPage: document.getElementById("cardsPage"),
+    cardsPager: document.getElementById("cardsPager"),
   };
 
   async function init() {
@@ -80,6 +90,10 @@
     DOM.searchInput.addEventListener("input", debounce(handleSearch, 300));
     DOM.viewToggle.addEventListener("click", handleViewSwitch);
     window.addEventListener("resize", debounce(handleResize, 250));
+    if (DOM.tablePrev) DOM.tablePrev.addEventListener("click", () => changeTablePage(-1));
+    if (DOM.tableNext) DOM.tableNext.addEventListener("click", () => changeTablePage(1));
+    if (DOM.cardsPrev) DOM.cardsPrev.addEventListener("click", () => changeCardsPage(-1));
+    if (DOM.cardsNext) DOM.cardsNext.addEventListener("click", () => changeCardsPage(1));
     DOM.tableView.addEventListener("click", (e) => {
       const row = e.target.closest("tr[data-code]");
       if (row) {
@@ -92,6 +106,10 @@
         switchViewAndHighlight(card.dataset.code);
       }
     });
+    const expandBtn = document.getElementById("btn-expand-all");
+    const collapseBtn = document.getElementById("btn-collapse-all");
+    if (expandBtn) expandBtn.addEventListener("click", expandAll);
+    if (collapseBtn) collapseBtn.addEventListener("click", collapseAll);
   }
 
   function processData() {
@@ -161,6 +179,24 @@
       d._children.forEach(collapse);
       d.children = null;
     }
+  }
+
+  function expand(d) {
+    if (d._children) {
+      d.children = d._children;
+      d._children = null;
+    }
+    if (d.children) d.children.forEach(expand);
+  }
+
+  function expandAll() {
+    expand(state.rootNode);
+    updateTree(state.rootNode);
+  }
+
+  function collapseAll() {
+    state.rootNode.children.forEach(collapse);
+    updateTree(state.rootNode);
   }
 
   function updateTree(source) {
@@ -265,6 +301,25 @@
     });
   }
 
+  function paginate(array, page, pageSize) {
+    const start = (page - 1) * pageSize;
+    return array.slice(start, start + pageSize);
+  }
+
+  function changeTablePage(delta) {
+    state.tablePage = Math.max(1, state.tablePage + delta);
+    renderTablePage();
+  }
+
+  function renderTablePage(nodes) {
+    const data = (nodes || state.allNodes).filter((n) => n.depth > 0);
+    const totalPages = Math.max(1, Math.ceil(data.length / state.pageSize));
+    if (state.tablePage > totalPages) state.tablePage = totalPages;
+    const pageItems = paginate(data, state.tablePage, state.pageSize);
+    DOM.tablePage.textContent = `${state.tablePage}/${totalPages}`;
+    populateTable(pageItems);
+  }
+
   function populateTable(nodesToRender) {
     const nodes = nodesToRender || state.allNodes;
     const fragment = document.createDocumentFragment();
@@ -292,6 +347,21 @@
     });
     DOM.tableBody.innerHTML = "";
     DOM.tableBody.appendChild(fragment);
+  }
+
+  function changeCardsPage(delta) {
+    state.cardsPage = Math.max(1, state.cardsPage + delta);
+    renderCardsPage();
+  }
+
+  function renderCardsPage(divisionsInput) {
+    const divisionsAll = divisionsInput && divisionsInput.length ? divisionsInput : (state.rootNode && state.rootNode.children ? state.rootNode.children : []);
+    const totalPages = Math.max(1, Math.ceil(divisionsAll.length / state.pageSize));
+    if (state.cardsPage > totalPages) state.cardsPage = totalPages;
+    const pageItems = paginate(divisionsAll, state.cardsPage, state.pageSize);
+    DOM.cardsPage.textContent = `${state.cardsPage}/${totalPages}`;
+    DOM.cardsPager.classList.toggle("hidden", totalPages <= 1);
+    populateCards(pageItems);
   }
 
   function populateCards(divisionsToRender) {
@@ -339,11 +409,11 @@
     [DOM.treeView, DOM.tableView, DOM.cardsView].forEach((view) => view.classList.add("hidden"));
     document.getElementById(`${state.currentView}View`).classList.remove("hidden");
 
-    if (state.currentView === "table" && DOM.tableBody.childElementCount === 0) {
-      populateTable();
+    if (state.currentView === "table") {
+      renderTablePage();
     }
-    if (state.currentView === "cards" && DOM.cardsContainer.childElementCount === 0) {
-      populateCards();
+    if (state.currentView === "cards") {
+      renderCardsPage();
     }
 
     handleSearch();
@@ -389,11 +459,13 @@
             String(node.data.avgSalary).includes(searchTerm))
       );
       if (state.currentView === "table") {
-        populateTable(results);
+        state.tablePage = 1;
+        renderTablePage(results);
       } else if (state.currentView === "cards") {
         const divisionCodes = new Set(results.map((n) => n.ancestors()[1]?.data.code).filter(Boolean));
         const divisionNodes = state.rootNode.children.filter((d) => divisionCodes.has(d.data.code));
-        populateCards(divisionNodes);
+        state.cardsPage = 1;
+        renderCardsPage(divisionNodes);
       }
     }
   }

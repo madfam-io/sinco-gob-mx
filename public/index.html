@@ -476,6 +476,10 @@
           <button id="btn-table" class="view-btn" data-view="table" role="tab" aria-selected="false" aria-controls="tableView">Tabla</button>
           <button id="btn-cards" class="view-btn" data-view="cards" role="tab" aria-selected="false" aria-controls="cardsView">Tarjetas</button>
         </div>
+        <div class="controls-row" aria-label="Acciones de árbol">
+          <button id="btn-expand-all" class="view-btn">Expandir todo</button>
+          <button id="btn-collapse-all" class="view-btn">Colapsar todo</button>
+        </div>
       </div>
       <div class="controls-row" style="margin-top:0.5rem">
         <label for="langSelect" class="stat-label" style="margin-right:0.5rem">Idioma</label>
@@ -506,8 +510,18 @@
             <tbody id="tableBody"></tbody>
           </table>
         </div>
+        <div class="controls-row" style="margin-top:0.5rem;justify-content:center">
+          <button id="tablePrev" class="view-btn">Anterior</button>
+          <span id="tablePage" class="stat-label" style="min-width:80px;text-align:center"></span>
+          <button id="tableNext" class="view-btn">Siguiente</button>
+        </div>
       </div>
       <div id="cardsView" class="cards-view hidden" role="tabpanel" aria-labelledby="btn-cards"></div>
+      <div class="controls-row hidden" id="cardsPager" style="margin:0.5rem 1rem;justify-content:center">
+        <button id="cardsPrev" class="view-btn">Anterior</button>
+        <span id="cardsPage" class="stat-label" style="min-width:80px;text-align:center"></span>
+        <button id="cardsNext" class="view-btn">Siguiente</button>
+      </div>
     </div>
 
     <div class="tooltip" id="tooltip" role="dialog" aria-live="polite" aria-hidden="true"></div>
