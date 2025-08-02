@@ -1,5 +1,4 @@
-// SINCO Data Structure with real salary information from research
-const sincoData = {
+{
     name: "SINCO 2019",
     code: "0",
     children: [
@@ -1427,4 +1426,4 @@ const sincoData = {
             ]
         }
     ]
-};
+}
