@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Nacional de Clasificación de Ocupaciones (SINCO) 2019 - México</title>
+    
+    <!-- D3.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Internal Stylesheet -->
     <style>
-        /* --- CSS Variables for easy theming --- */
         :root {
             --bg-primary: #0f0f1f;
             --bg-secondary: #1a1a2e;
@@ -29,7 +34,6 @@
             --danger-gradient: linear-gradient(135deg, #ff4466, #ff2244);
         }
 
-        /* --- General Styles & Reset --- */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -41,15 +45,11 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* --- Utility Classes --- */
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
-        /* --- Header & Stats --- */
         .header {
             background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
             padding: 1rem;
@@ -57,7 +57,6 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
         }
 
         .header h1 {
@@ -98,18 +97,9 @@
             box-shadow: 0 4px 20px var(--shadow-color-light);
         }
 
-        .stat-label {
-            font-size: 0.75rem;
-            opacity: 0.8;
-        }
+        .stat-label { font-size: 0.75rem; opacity: 0.8; }
+        .stat-value { font-size: 1.1rem; font-weight: bold; color: var(--accent-primary); }
 
-        .stat-value {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--accent-primary);
-        }
-
-        /* --- Controls --- */
         .controls {
             display: flex;
             flex-direction: column;
@@ -118,11 +108,7 @@
             background: var(--bg-interactive);
         }
 
-        .search-box {
-            width: 100%;
-            position: relative;
-        }
-
+        .search-box { width: 100%; position: relative; }
         .search-box input {
             width: 100%;
             padding: 0.8rem 1rem 0.8rem 3rem;
@@ -133,14 +119,12 @@
             font-size: 1rem;
             transition: all 0.3s ease;
         }
-
         .search-box input:focus {
             outline: none;
             border-color: var(--accent-primary);
             background: rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 20px var(--shadow-color-light);
         }
-
         .search-icon {
             position: absolute;
             left: 1rem;
@@ -163,8 +147,6 @@
             background: rgba(255, 255, 255, 0.05);
             padding: 0.25rem;
             border-radius: 20px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         .view-btn {
@@ -177,29 +159,24 @@
             transition: all 0.3s ease;
             font-size: 0.85rem;
             white-space: nowrap;
-            min-height: 44px;
         }
-
         .view-btn.active {
             background: var(--accent-gradient);
             color: white;
             box-shadow: 0 4px 15px var(--shadow-color-light);
         }
         
-        /* --- Content Area & Views --- */
         .content {
-            display: flex;
-            height: calc(100vh - 210px); /* Adjusted for header+controls */
+            height: calc(100vh - 210px);
             position: relative;
         }
 
         .tree-view, .table-view, .cards-view {
-            flex: 1;
+            height: 100%;
             overflow: auto;
             padding: 1rem;
         }
 
-        /* --- D3 Tree View --- */
         .node { cursor: pointer; }
         .node circle {
             fill: var(--bg-tertiary);
@@ -233,12 +210,11 @@
             stroke-width: 2.5px;
         }
 
-        /* --- Table View --- */
         .table-container {
             background: rgba(22, 33, 62, 0.3);
             border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px var(--shadow-color-dark);
+            overflow: auto;
+            max-height: 100%;
         }
         table { width: 100%; border-collapse: collapse; }
         th {
@@ -265,7 +241,6 @@
         .salary-medium { background: var(--warning-gradient); }
         .salary-low { background: var(--danger-gradient); color: white; }
 
-        /* --- Cards View --- */
         .cards-view {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -300,9 +275,8 @@
             white-space: nowrap;
         }
         
-        /* --- Tooltip --- */
         .tooltip {
-            position: absolute;
+            position: fixed;
             padding: 1rem;
             background: rgba(10, 10, 10, 0.95);
             border: 2px solid rgba(0, 212, 255, 0.5);
@@ -319,15 +293,15 @@
         .tooltip p { margin: 0.25rem 0; font-size: 0.9rem; }
         .tooltip strong { color: var(--text-primary); }
 
-        /* --- Loader --- */
         .loader {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.7);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
+            transition: opacity 0.3s ease;
         }
         .loader-circle {
             width: 80px;
@@ -339,9 +313,8 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* --- Desktop & Responsive Styles --- */
         @media (min-width: 768px) {
-            .header { padding: 2rem; }
+            .header { padding: 1.5rem 2rem; }
             .header h1 { font-size: 2.5rem; text-align: left; }
             .stats-bar { display: flex; gap: 2rem; grid-template-columns: none; }
             .stat-item { padding: 0.5rem 1rem; text-align: left; }
@@ -351,7 +324,7 @@
             .search-box { flex: 1; min-width: 300px; }
             .controls-row { gap: 1rem; }
             .view-btn { padding: 0.5rem 1rem; font-size: 1rem; }
-            .content { height: calc(100vh - 250px); }
+            .content { height: calc(100vh - 240px); }
         }
     </style>
 </head>
@@ -361,19 +334,19 @@
         <div class="stats-bar">
             <div class="stat-item">
                 <div class="stat-label">Total Ocupaciones</div>
-                <div id="stat-total-occupations" class="stat-value">0</div>
+                <div id="stat-total-occupations" class="stat-value">...</div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">Divisiones</div>
-                <div id="stat-divisions" class="stat-value">0</div>
+                <div id="stat-divisions" class="stat-value">...</div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">Total Empleados</div>
-                <div id="stat-total-employees" class="stat-value">0</div>
+                <div id="stat-total-employees" class="stat-value">...</div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">Salario Promedio</div>
-                <div id="stat-avg-salary" class="stat-value">$0 MXN</div>
+                <div id="stat-avg-salary" class="stat-value">...</div>
             </div>
         </div>
     </div>
@@ -401,7 +374,7 @@
         </div>
         <div id="tableView" class="table-view hidden">
             <div class="table-container">
-                <table id="occupationTable">
+                <table>
                     <thead>
                         <tr>
                             <th>Código</th>
@@ -425,12 +398,11 @@
     </div>
     
     <script>
-    // Self-invoking function to encapsulate the entire script, preventing global scope pollution.
     (function() {
         'use strict';
 
         // --- STATE & CONSTANTS --- //
-        let state = {
+        const state = {
             currentView: 'tree',
             allNodes: [],
             rootNode: null,
@@ -445,14 +417,12 @@
 
         const DOM = {
             loader: document.getElementById('loader'),
-            header: document.querySelector('.header'),
-            controls: document.querySelector('.controls'),
-            content: document.querySelector('.content'),
             treeView: document.getElementById('treeView'),
             tableView: document.getElementById('tableView'),
             cardsView: document.getElementById('cardsView'),
             treeSvg: d3.select("#treeSvg"),
             tableBody: document.getElementById('tableBody'),
+            cardsContainer: document.getElementById('cardsView'),
             searchInput: document.getElementById('searchInput'),
             tooltip: document.getElementById('tooltip'),
             viewToggle: document.querySelector('.view-toggle'),
@@ -461,51 +431,46 @@
             statTotalEmployees: document.getElementById('stat-total-employees'),
             statAvgSalary: document.getElementById('stat-avg-salary'),
         };
-        
-        // --- DATA --- //
-        // In a real-world application, this data would be in a separate JSON file
-        // and fetched asynchronously to avoid blocking the HTML rendering.
-        const sincoData = {
-            name: "SINCO 2019", code: "0",
-            children: [
-                // ... (The massive sincoData object is omitted for brevity, but it's the same as your original)
-                // It's assumed to be here.
-                 {
-                    name: "División 1: Funcionarios, directores y jefes", code: "1", avgSalary: 25000, formality: 95, employees: 850000,
-                    children: [
-                        { name: "11 - Funcionarios y altas autoridades...", code: "11", avgSalary: 45000, formality: 100, employees: 120000, children: [
-                            { name: "111 - Funcionarios del poder ejecutivo...", code: "111", avgSalary: 55000, formality: 100, employees: 45000, children: [
-                                {name: "1111 - Legisladores", code: "1111", avgSalary: 60000, formality: 100, employees: 5000},
-                            ]},
-                        ]},
-                    ]
-                },
-                {
-                    name: "División 2: Profesionistas y técnicos", code: "2", avgSalary: 17741, formality: 85.5, employees: 9400000,
-                    children: [
-                        { name: "21 - Especialistas en ciencias...", code: "21", avgSalary: 16500, formality: 82, employees: 2800000, children: [
-                             { name: "212 - Administradores y mercadólogos", code: "212", avgSalary: 17000, formality: 85, employees: 1059058, children: [
-                                {name: "2121 - Administradores de empresas", code: "2121", avgSalary: 18000, formality: 86, employees: 450000},
-                            ]},
-                        ]},
-                    ]
-                },
-                { name: "División 3: Trabajadores auxiliares...", code: "3", avgSalary: 8500, formality: 75, employees: 4500000 },
-                { name: "División 4: Comerciantes, empleados en ventas...", code: "4", avgSalary: 7500, formality: 45, employees: 6510000 },
-                { name: "División 5: Trabajadores en servicios personales...", code: "5", avgSalary: 6800, formality: 55, employees: 5200000 },
-                { name: "División 6: Trabajadores en actividades agrícolas...", code: "6", avgSalary: 4200, formality: 5.4, employees: 6400000 },
-                { name: "División 7: Trabajadores artesanales...", code: "7", avgSalary: 8200, formality: 35, employees: 8100000 },
-                { name: "División 8: Operadores de maquinaria...", code: "8", avgSalary: 9500, formality: 65, employees: 7200000 },
-                { name: "División 9: Trabajadores en actividades elementales...", code: "9", avgSalary: 5200, formality: 30, employees: 8900000 }
-            ]
-        };
 
-        // --- D3 & VISUALIZATION LOGIC --- //
+        // --- INITIALIZATION --- //
+        
+        /**
+         * Main function to initialize the application.
+         * Fetches data, sets up visualizations and event listeners.
+         */
+        async function init() {
+            DOM.loader.classList.remove('hidden');
+            try {
+                // Asynchronously fetch the data
+                const response = await fetch('./sincoData.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const sincoData = await response.json();
+
+                // Once data is loaded, proceed with setup
+                setupD3(sincoData);
+                processData();
+                updateStats();
+                setupEventListeners();
+
+            } catch (error) {
+                console.error("Failed to load and initialize SINCO data:", error);
+                DOM.loader.innerHTML = `<p style="color:white;">Error al cargar los datos. Por favor, intente de nuevo más tarde.</p>`;
+            } finally {
+                // Hide loader after a small delay for smooth transition
+                setTimeout(() => {
+                    DOM.loader.style.opacity = '0';
+                    setTimeout(() => DOM.loader.classList.add('hidden'), 300);
+                }, 500);
+            }
+        }
 
         /**
-         * Initializes the main D3 tree visualization.
+         * Sets up the D3 tree visualization.
+         * @param {object} sincoData - The hierarchical data for occupations.
          */
-        function initializeTreeView() {
+        function setupD3(sincoData) {
             const container = DOM.treeView;
             const width = container.clientWidth;
             const height = container.clientHeight;
@@ -516,36 +481,84 @@
                 .attr("viewBox", `0 0 ${width} ${height}`);
 
             state.d3.g = state.d3.svg.append("g").attr("transform", "translate(80,0)");
-
             state.d3.treeLayout = d3.tree().size([height, width - 200]);
-
             state.rootNode = d3.hierarchy(sincoData, d => d.children);
             state.rootNode.x0 = height / 2;
             state.rootNode.y0 = 0;
             
-            // Collapse all nodes after the first level (divisions)
             state.rootNode.children.forEach(collapse);
-            
             updateTree(state.rootNode);
             setupZoom();
         }
 
         /**
-         * Sets up zoom and pan functionality for the SVG canvas.
+         * Sets up all event listeners for the application.
          */
+        function setupEventListeners() {
+            DOM.searchInput.addEventListener('input', debounce(handleSearch, 300));
+            DOM.viewToggle.addEventListener('click', handleViewSwitch);
+            window.addEventListener('resize', debounce(handleResize, 250));
+            DOM.tableView.addEventListener('click', (e) => {
+                const row = e.target.closest('tr[data-code]');
+                if (row) {
+                    switchViewAndHighlight(row.dataset.code);
+                }
+            });
+            DOM.cardsContainer.addEventListener('click', (e) => {
+                const card = e.target.closest('.division-card[data-code]');
+                if (card) {
+                    switchViewAndHighlight(card.dataset.code);
+                }
+            });
+        }
+
+        // --- DATA PROCESSING & HELPERS --- //
+
+        function processData() {
+            state.allNodes = state.rootNode.descendants();
+        }
+
+        function updateStats() {
+            const leafNodes = state.allNodes.filter(d => !d.children && !d._children);
+            const totalEmployees = d3.sum(leafNodes, d => d.data.employees || 0);
+            const weightedSalarySum = d3.sum(leafNodes, d => (d.data.avgSalary || 0) * (d.data.employees || 0));
+            
+            DOM.statTotalOccupations.textContent = leafNodes.length.toLocaleString();
+            DOM.statDivisions.textContent = state.rootNode.children.length;
+            DOM.statTotalEmployees.textContent = totalEmployees.toLocaleString();
+            DOM.statAvgSalary.textContent = `$${(totalEmployees > 0 ? Math.round(weightedSalarySum / totalEmployees) : 0).toLocaleString()} MXN`;
+        }
+
+        function getOccupationLevel(code) {
+            const levels = { 1: 'División', 2: 'Grupo Principal', 3: 'Subgrupo', 4: 'Grupo Unitario' };
+            return levels[String(code).length] || 'Ocupación';
+        }
+
+        function getSalaryClass(salary) {
+            if (!salary) return 'salary-low';
+            if (salary >= 20000) return 'salary-high';
+            if (salary >= 10000) return 'salary-medium';
+            return 'salary-low';
+        }
+
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
+        // --- D3 & VISUALIZATION LOGIC --- //
+
         function setupZoom() {
             state.d3.zoom = d3.zoom()
                 .scaleExtent([0.1, 3])
-                .on("zoom", (event) => {
-                    state.d3.g.attr("transform", event.transform);
-                });
+                .on("zoom", (event) => state.d3.g.attr("transform", event.transform));
             state.d3.svg.call(state.d3.zoom);
         }
         
-        /**
-         * Recursively collapses a node and all its children.
-         * @param {object} d - The D3 node object.
-         */
         function collapse(d) {
             if (d.children) {
                 d._children = d.children;
@@ -554,20 +567,14 @@
             }
         }
 
-        /**
-         * Updates the tree visualization based on a source node.
-         * @param {object} source - The D3 node that was clicked.
-         */
         function updateTree(source) {
             const duration = 500;
             const treeData = state.d3.treeLayout(state.rootNode);
             const nodes = treeData.descendants();
             const links = treeData.links();
 
-            // Normalize for fixed-depth.
             nodes.forEach(d => { d.y = d.depth * 220; });
 
-            // Update nodes
             const node = state.d3.g.selectAll("g.node")
                 .data(nodes, d => d.id || (d.id = ++state.d3.nodeId));
 
@@ -579,8 +586,7 @@
                 .on("mousemove", handleMouseMove)
                 .on("mouseout", handleMouseOut);
 
-            nodeEnter.append("circle")
-                .attr("r", 1e-6);
+            nodeEnter.append("circle").attr("r", 1e-6);
 
             nodeEnter.append("text")
                 .attr("dy", "0.31em")
@@ -596,120 +602,33 @@
                 .attr("stroke", "var(--bg-primary)");
 
             const nodeUpdate = nodeEnter.merge(node);
+            nodeUpdate.transition().duration(duration).attr("transform", d => `translate(${d.y},${d.x})`);
+            nodeUpdate.select("circle").attr("r", 8).style("fill", d => d._children ? "var(--accent-primary)" : "var(--bg-tertiary)");
 
-            nodeUpdate.transition()
-                .duration(duration)
-                .attr("transform", d => `translate(${d.y},${d.x})`);
-
-            nodeUpdate.select("circle")
-                .attr("r", 8)
-                .style("fill", d => d._children ? "var(--accent-primary)" : "var(--bg-tertiary)");
-
-            const nodeExit = node.exit().transition()
-                .duration(duration)
-                .attr("transform", `translate(${source.y},${source.x})`)
-                .remove();
-
+            const nodeExit = node.exit().transition().duration(duration)
+                .attr("transform", `translate(${source.y},${source.x})`).remove();
             nodeExit.select("circle").attr("r", 1e-6);
             nodeExit.select("text").style("fill-opacity", 1e-6);
 
-            // Update links
-            const link = state.d3.g.selectAll("path.link")
-                .data(links, d => d.target.id);
-
-            const linkEnter = link.enter().insert("path", "g")
-                .attr("class", "link")
-                .attr("d", d3.linkHorizontal().x(d => source.y0).y(d => source.x0));
-
-            const linkUpdate = linkEnter.merge(link);
-
-            linkUpdate.transition()
-                .duration(duration)
+            const link = state.d3.g.selectAll("path.link").data(links, d => d.target.id);
+            const linkEnter = link.enter().insert("path", "g").attr("class", "link")
+                .attr("d", d3.linkHorizontal().x(() => source.y0).y(() => source.x0));
+            linkEnter.merge(link).transition().duration(duration)
                 .attr("d", d3.linkHorizontal().x(d => d.y).y(d => d.x));
+            link.exit().transition().duration(duration)
+                .attr("d", d3.linkHorizontal().x(() => source.y).y(() => source.x)).remove();
 
-            link.exit().transition()
-                .duration(duration)
-                .attr("d", d3.linkHorizontal().x(d => source.y).y(d => source.x))
-                .remove();
-
-            // Store old positions for transition.
-            nodes.forEach(d => {
-                d.x0 = d.x;
-                d.y0 = d.y;
-            });
-        }
-
-        // --- DATA PROCESSING & HELPERS --- //
-
-        /**
-         * Flattens the hierarchical data into an array of all nodes.
-         */
-        function processData() {
-            state.allNodes = state.rootNode.descendants();
-        }
-
-        /**
-         * Gets a descriptive level name based on code length.
-         * @param {string} code - The occupation code.
-         * @returns {string} The level name.
-         */
-        function getOccupationLevel(code) {
-            const levels = { 1: 'División', 2: 'Grupo Principal', 3: 'Subgrupo', 4: 'Grupo Unitario' };
-            return levels[String(code).length] || 'Ocupación';
-        }
-
-        /**
-         * Gets a CSS class based on salary amount.
-         * @param {number} salary - The average salary.
-         * @returns {string} The CSS class name.
-         */
-        function getSalaryClass(salary) {
-            if (!salary) return 'salary-low';
-            if (salary >= 20000) return 'salary-high';
-            if (salary >= 10000) return 'salary-medium';
-            return 'salary-low';
-        }
-        
-        /**
-         * A utility to delay function execution, useful for resize events.
-         * @param {function} func - The function to debounce.
-         * @param {number} delay - The delay in milliseconds.
-         * @returns {function} The debounced function.
-         */
-        function debounce(func, delay) {
-            let timeout;
-            return function(...args) {
-                const context = this;
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), delay);
-            };
+            nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
         }
 
         // --- RENDERING LOGIC --- //
-        
-        /**
-         * Updates the main statistics in the header.
-         */
-        function updateStats() {
-            const leafNodes = state.allNodes.filter(d => !d.children && !d._children);
-            const totalEmployees = d3.sum(leafNodes, d => d.data.employees || 0);
-            const weightedSalarySum = d3.sum(leafNodes, d => (d.data.avgSalary || 0) * (d.data.employees || 0));
-            
-            DOM.statTotalOccupations.textContent = leafNodes.length.toLocaleString();
-            DOM.statDivisions.textContent = state.rootNode.children.length;
-            DOM.statTotalEmployees.textContent = totalEmployees.toLocaleString();
-            DOM.statAvgSalary.textContent = `$${(totalEmployees > 0 ? Math.round(weightedSalarySum / totalEmployees) : 0).toLocaleString()} MXN`;
-        }
 
-        /**
-         * Populates the table view with all occupation data.
-         */
-        function populateTable() {
-            const sortedNodes = [...state.allNodes].sort((a, b) => a.data.code.localeCompare(b.data.code));
+        function populateTable(nodesToRender) {
+            const nodes = nodesToRender || state.allNodes;
             const fragment = document.createDocumentFragment();
             
-            sortedNodes.forEach(node => {
-                if (node.depth === 0) return; // Skip root
+            nodes.forEach(node => {
+                if (node.depth === 0) return;
                 const item = node.data;
                 const row = document.createElement('tr');
                 row.dataset.code = item.code;
@@ -727,11 +646,8 @@
             DOM.tableBody.appendChild(fragment);
         }
         
-        /**
-         * Populates the cards view with division-level data.
-         */
-        function populateCards() {
-            const divisions = state.rootNode.children;
+        function populateCards(divisionsToRender) {
+            const divisions = divisionsToRender || state.rootNode.children;
             const fragment = document.createDocumentFragment();
 
             divisions.forEach(division => {
@@ -739,8 +655,7 @@
                 card.className = 'division-card';
                 card.dataset.code = division.data.code;
                 
-                const descendants = division.descendants();
-                const leafNodes = descendants.filter(d => !d.children && !d._children);
+                const leafNodes = division.descendants().filter(d => !d.children && !d._children);
                 const totalEmployees = d3.sum(leafNodes, d => d.data.employees || 0);
 
                 card.innerHTML = `
@@ -754,48 +669,29 @@
                 `;
                 fragment.appendChild(card);
             });
-            DOM.cardsView.innerHTML = '';
-            DOM.cardsView.appendChild(fragment);
+            DOM.cardsContainer.innerHTML = '';
+            DOM.cardsContainer.appendChild(fragment);
         }
-
 
         // --- EVENT HANDLERS --- //
 
-        /**
-         * Handles clicks on view toggle buttons to switch between visualizations.
-         * @param {Event} e - The click event.
-         */
         function handleViewSwitch(e) {
             const button = e.target.closest('.view-btn');
-            if (!button) return;
+            if (!button || button.classList.contains('active')) return;
 
             state.currentView = button.dataset.view;
-
-            // Update button active state
             DOM.viewToggle.querySelector('.active').classList.remove('active');
             button.classList.add('active');
 
-            // Toggle view visibility
-            [DOM.treeView, DOM.tableView, DOM.cardsView].forEach(view => {
-                view.classList.add('hidden');
-            });
+            [DOM.treeView, DOM.tableView, DOM.cardsView].forEach(view => view.classList.add('hidden'));
             document.getElementById(`${state.currentView}View`).classList.remove('hidden');
             
-            // Populate views if they haven't been already
-            if (state.currentView === 'table' && DOM.tableBody.childElementCount === 0) {
-                populateTable();
-            } else if (state.currentView === 'cards' && DOM.cardsView.childElementCount === 0) {
-                populateCards();
-            }
+            if (state.currentView === 'table' && DOM.tableBody.childElementCount === 0) populateTable();
+            if (state.currentView === 'cards' && DOM.cardsContainer.childElementCount === 0) populateCards();
             
-            handleSearch(); // Re-apply search filter on view switch
+            handleSearch();
         }
         
-        /**
-         * Toggles node children visibility on click.
-         * @param {Event} event - The D3 click event.
-         * @param {object} d - The clicked D3 node.
-         */
         function handleNodeClick(event, d) {
             if (d.children) {
                 d._children = d.children;
@@ -807,49 +703,59 @@
             updateTree(d);
         }
 
-        /**
-         * Handles the search input to filter views.
-         */
         function handleSearch() {
             const searchTerm = DOM.searchInput.value.toLowerCase().trim();
-            
-            // Clear previous highlights
             d3.selectAll('.node.search-highlight').classed('search-highlight', false);
 
-            if (state.currentView === 'table') {
-                DOM.tableBody.querySelectorAll('tr').forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    row.style.display = text.includes(searchTerm) ? '' : 'none';
-                });
-            } else if (state.currentView === 'cards') {
-                DOM.cardsView.querySelectorAll('.division-card').forEach(card => {
-                    const text = card.textContent.toLowerCase();
-                    card.style.display = text.includes(searchTerm) ? '' : 'none';
-                });
-            } else if (state.currentView === 'tree' && searchTerm) {
+            if (state.currentView === 'tree') {
+                if (!searchTerm) return;
                 const matchingNodes = state.allNodes.filter(node => 
                     node.data.name.toLowerCase().includes(searchTerm) ||
                     node.data.code.toLowerCase().includes(searchTerm)
                 );
-                
                 if (matchingNodes.length > 0) {
-                    // Expand path to the first found node and highlight it
                     expandPathToNode(matchingNodes[0]);
                     centerNode(matchingNodes[0]);
-                    
-                    // Highlight all matching nodes
                     matchingNodes.forEach(node => {
-                        d3.selectAll("g.node").filter(d => d.id === node.id)
-                            .classed('search-highlight', true);
+                        d3.selectAll("g.node").filter(d => d.id === node.id).classed('search-highlight', true);
                     });
+                }
+            } else {
+                const results = state.allNodes.filter(node => 
+                    node.depth > 0 && (
+                        node.data.name.toLowerCase().includes(searchTerm) ||
+                        node.data.code.toLowerCase().includes(searchTerm) ||
+                        String(node.data.avgSalary).includes(searchTerm)
+                    )
+                );
+                if (state.currentView === 'table') {
+                    populateTable(results);
+                } else if (state.currentView === 'cards') {
+                    const divisionCodes = new Set(results.map(n => n.ancestors()[1]?.data.code).filter(Boolean));
+                    const divisionNodes = state.rootNode.children.filter(d => divisionCodes.has(d.data.code));
+                    populateCards(divisionNodes);
                 }
             }
         }
+
+        function switchViewAndHighlight(code) {
+            const node = state.allNodes.find(n => n.data.code === code);
+            if (!node) return;
+
+            // Switch to tree view if not already there
+            if (state.currentView !== 'tree') {
+                document.querySelector(`.view-btn[data-view="tree"]`).click();
+            }
+
+            // Defer the highlight to ensure view has switched
+            setTimeout(() => {
+                expandPathToNode(node);
+                centerNode(node);
+                d3.selectAll('.node.search-highlight').classed('search-highlight', false);
+                d3.selectAll("g.node").filter(d => d.id === node.id).classed('search-highlight', true);
+            }, 100);
+        }
         
-        /**
-         * Expands the tree to make a target node visible.
-         * @param {object} node - The D3 node to reveal.
-         */
         function expandPathToNode(node) {
             node.ancestors().forEach(ancestor => {
                 if (ancestor._children) {
@@ -860,31 +766,19 @@
             updateTree(node);
         }
 
-        /**
-         * Centers the view on a specific node.
-         * @param {object} node - The D3 node to center on.
-         */
         function centerNode(node) {
-            const width = DOM.treeView.clientWidth;
-            const height = DOM.treeView.clientHeight;
+            const { width, height } = DOM.treeView.getBoundingClientRect();
             const transform = d3.zoomIdentity
                 .translate(width / 2, height / 2)
-                .scale(1)
+                .scale(1.2)
                 .translate(-node.y, -node.x);
             
             state.d3.svg.transition().duration(750).call(state.d3.zoom.transform, transform);
         }
 
-        /**
-         * Handles resizing of the window to keep the visualization adaptive.
-         */
         function handleResize() {
             if (state.currentView !== 'tree') return;
-
-            const container = DOM.treeView;
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-
+            const { width, height } = DOM.treeView.getBoundingClientRect();
             state.d3.svg.attr("width", width).attr("height", height).attr("viewBox", `0 0 ${width} ${height}`);
             state.d3.treeLayout.size([height, width - 200]);
             updateTree(state.rootNode);
@@ -901,40 +795,17 @@
                 <p><strong>Formalidad:</strong> ${d.data.formality || 'N/A'}%</p>
                 <p><strong>Empleados:</strong> ${d.data.employees?.toLocaleString() || 'N/A'}</p>
             `;
-            d3.select(this).classed('highlight', true);
-            d3.select(this).selectAll('path.link').classed('highlight', true);
+            d3.select(event.currentTarget).classed('highlight', true);
         }
 
         function handleMouseMove(event) {
-            const [x, y] = [event.pageX, event.pageY];
-            DOM.tooltip.style.left = `${x + 15}px`;
-            DOM.tooltip.style.top = `${y + 15}px`;
+            DOM.tooltip.style.left = `${event.clientX + 15}px`;
+            DOM.tooltip.style.top = `${event.clientY + 15}px`;
         }
 
         function handleMouseOut(event, d) {
             DOM.tooltip.style.opacity = 0;
-            d3.select(this).classed('highlight', false);
-        }
-
-        // --- INITIALIZATION --- //
-        function init() {
-            // Show loader
-            DOM.loader.classList.remove('hidden');
-
-            // Process data after a short delay to allow the loader to render
-            setTimeout(() => {
-                initializeTreeView();
-                processData();
-                updateStats();
-
-                // Setup event listeners
-                DOM.searchInput.addEventListener('input', handleSearch);
-                DOM.viewToggle.addEventListener('click', handleViewSwitch);
-                window.addEventListener('resize', debounce(handleResize, 250));
-                
-                // Hide loader
-                DOM.loader.classList.add('hidden');
-            }, 50);
+            d3.select(event.currentTarget).classed('highlight', false);
         }
 
         // Start the application once the DOM is fully loaded.
