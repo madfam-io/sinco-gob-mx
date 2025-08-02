@@ -111,6 +111,14 @@
     const collapseBtn = document.getElementById("btn-collapse-all");
     if (expandBtn) expandBtn.addEventListener("click", expandAll);
     if (collapseBtn) collapseBtn.addEventListener("click", collapseAll);
+
+    const toggleStats = document.getElementById("btn-toggle-stats");
+    if (toggleStats) toggleStats.addEventListener("click", () => {
+      const stats = document.getElementById("statsBar");
+      const hidden = stats.classList.toggle("hidden");
+      toggleStats.setAttribute("aria-expanded", String(!hidden));
+      toggleStats.textContent = hidden ? "Mostrar métricas" : "Ocultar métricas";
+    });
   }
 
   function processData() {
