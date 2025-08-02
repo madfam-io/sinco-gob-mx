@@ -34,7 +34,7 @@
   async function init() {
     DOM.loader.classList.remove("hidden");
     try {
-      const response = await fetch("/sincoData.json");
+      const response = await fetch("sincoData.json");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -97,16 +97,17 @@
     state.allNodes = state.rootNode.descendants();
   }
 
-  function updateStats() {
-    const leafNodes = state.allNodes.filter((d) => !d.children && !d._children);
-    const totalEmployees = d3.sum(leafNodes, (d) => d.data.employees || 0);
+  function updateStatsFromData(sincoData) {
+    const root = d3.hierarchy(sincoData, (d) => d.children);
+    const leaves = root.leaves();
+    const totalEmployees = d3.sum(leaves, (d) => d.data.employees || 0);
     const weightedSalarySum = d3.sum(
-      leafNodes,
+      leaves,
       (d) => (d.data.avgSalary || 0) * (d.data.employees || 0)
     );
 
-    DOM.statTotalOccupations.textContent = leafNodes.length.toLocaleString();
-    DOM.statDivisions.textContent = state.rootNode.children.length;
+    DOM.statTotalOccupations.textContent = leaves.length.toLocaleString();
+    DOM.statDivisions.textContent = (root.children ? root.children.length : 0).toString();
     DOM.statTotalEmployees.textContent = totalEmployees.toLocaleString();
     DOM.statAvgSalary.textContent = `$${(
       totalEmployees > 0 ? Math.round(weightedSalarySum / totalEmployees) : 0
