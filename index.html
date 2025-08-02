@@ -4,43 +4,110 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="appTitle">SINCO 2019 - Sistema Nacional de Clasificación de Ocupaciones</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+    />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="icon" href="/public/favicon.ico" />
   </head>
   <body>
     <div class="header" role="banner">
       <h1 id="pageHeading">SINCO 2019 - Sistema Nacional de Clasificación de Ocupaciones</h1>
       <div class="stats-bar">
-        <div class="stat-item"><div class="stat-label">Total Ocupaciones</div><div id="stat-total-occupations" class="stat-value">...</div></div>
-        <div class="stat-item"><div class="stat-label">Divisiones</div><div id="stat-divisions" class="stat-value">...</div></div>
-        <div class="stat-item"><div class="stat-label">Total Empleados</div><div id="stat-total-employees" class="stat-value">...</div></div>
-        <div class="stat-item"><div class="stat-label">Salario Promedio</div><div id="stat-avg-salary" class="stat-value">...</div></div>
+        <div class="stat-item">
+          <div class="stat-label">Total Ocupaciones</div>
+          <div id="stat-total-occupations" class="stat-value">...</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Divisiones</div>
+          <div id="stat-divisions" class="stat-value">...</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Total Empleados</div>
+          <div id="stat-total-employees" class="stat-value">...</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Salario Promedio</div>
+          <div id="stat-avg-salary" class="stat-value">...</div>
+        </div>
       </div>
     </div>
 
     <div class="controls">
       <div class="search-box" role="search">
         <span class="search-icon" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
         </span>
-        <input type="text" id="searchInput" placeholder="Buscar ocupación, código o salario..." aria-label="Buscar ocupación, código o salario" />
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Buscar ocupación, código o salario..."
+          aria-label="Buscar ocupación, código o salario"
+        />
       </div>
       <div class="controls-row">
         <div class="view-toggle" aria-label="Cambiar vista" role="tablist">
-          <button id="btn-tree" class="view-btn active" data-view="tree" role="tab" aria-selected="true" aria-controls="treeView">Árbol</button>
-          <button id="btn-table" class="view-btn" data-view="table" role="tab" aria-selected="false" aria-controls="tableView">Tabla</button>
-          <button id="btn-cards" class="view-btn" data-view="cards" role="tab" aria-selected="false" aria-controls="cardsView">Tarjetas</button>
+          <button
+            id="btn-tree"
+            class="view-btn active"
+            data-view="tree"
+            role="tab"
+            aria-selected="true"
+            aria-controls="treeView"
+          >
+            Árbol
+          </button>
+          <button
+            id="btn-table"
+            class="view-btn"
+            data-view="table"
+            role="tab"
+            aria-selected="false"
+            aria-controls="tableView"
+          >
+            Tabla
+          </button>
+          <button
+            id="btn-cards"
+            class="view-btn"
+            data-view="cards"
+            role="tab"
+            aria-selected="false"
+            aria-controls="cardsView"
+          >
+            Tarjetas
+          </button>
         </div>
         <div class="controls-row" aria-label="Acciones de árbol">
           <button id="btn-expand-all" class="view-btn">Expandir todo</button>
           <button id="btn-collapse-all" class="view-btn">Colapsar todo</button>
         </div>
       </div>
-      <div class="controls-row" id="filtersBar" style="margin-top:.5rem; gap:.5rem; flex-wrap:wrap">
+      <div
+        class="controls-row"
+        id="filtersBar"
+        style="margin-top: 0.5rem; gap: 0.5rem; flex-wrap: wrap"
+      >
         <label class="stat-label" for="filterFamily">Familia</label>
         <select id="filterFamily" aria-label="Filtrar por familia"></select>
         <label class="stat-label" for="filterLevel">Nivel</label>
@@ -48,29 +115,68 @@
         <label class="stat-label" for="filterLocation">Ubicación</label>
         <select id="filterLocation" aria-label="Filtrar por ubicación"></select>
         <label class="stat-label" for="filterOpenRoles">Vacantes</label>
-        <select id="filterOpenRoles" aria-label="Filtrar por vacantes"><option value="">Todos</option><option value="open">Solo abiertos</option><option value="filled">Sin vacantes</option></select>
-        <div style="flex:1"></div>
-        <label for="langSelect" class="stat-label" style="margin-right:.5rem">Idioma</label>
-        <select id="langSelect" aria-label="Seleccionar idioma"><option value="es">ES</option><option value="en">EN</option></select>
+        <select id="filterOpenRoles" aria-label="Filtrar por vacantes">
+          <option value="">Todos</option>
+          <option value="open">Solo abiertos</option>
+          <option value="filled">Sin vacantes</option>
+        </select>
+        <div style="flex: 1"></div>
+        <label for="langSelect" class="stat-label" style="margin-right: 0.5rem">Idioma</label>
+        <select id="langSelect" aria-label="Seleccionar idioma">
+          <option value="es">ES</option>
+          <option value="en">EN</option>
+        </select>
       </div>
     </div>
 
     <div class="content" role="main" aria-labelledby="pageHeading">
       <div id="treeView" class="tree-view" role="tabpanel" aria-labelledby="btn-tree">
-        <div class="controls-row" style="justify-content:flex-end;margin-bottom:.5rem"><button id="btn-reset-zoom" class="view-btn">Restablecer zoom</button></div>
+        <div class="controls-row" style="justify-content: flex-end; margin-bottom: 0.5rem">
+          <button id="btn-reset-zoom" class="view-btn">Restablecer zoom</button>
+        </div>
         <svg id="treeSvg" role="img" aria-label="Árbol de ocupaciones"></svg>
       </div>
       <div id="tableView" class="table-view hidden" role="tabpanel" aria-labelledby="btn-table">
         <div class="table-container">
           <table>
-            <thead><tr><th>Código</th><th>Ocupación</th><th>División</th><th>Salario Promedio</th><th>Formalidad</th><th>Empleados</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Ocupación</th>
+                <th>División</th>
+                <th>Salario Promedio</th>
+                <th>Formalidad</th>
+                <th>Empleados</th>
+              </tr>
+            </thead>
             <tbody id="tableBody"></tbody>
           </table>
         </div>
-        <div class="controls-row" style="margin-top:.5rem;justify-content:center"><button id="tablePrev" class="view-btn">Anterior</button><span id="tablePage" class="stat-label" style="min-width:80px;text-align:center"></span><button id="tableNext" class="view-btn">Siguiente</button></div>
+        <div class="controls-row" style="margin-top: 0.5rem; justify-content: center">
+          <button id="tablePrev" class="view-btn">Anterior</button
+          ><span
+            id="tablePage"
+            class="stat-label"
+            style="min-width: 80px; text-align: center"
+          ></span
+          ><button id="tableNext" class="view-btn">Siguiente</button>
+        </div>
       </div>
-      <div id="cardsView" class="cards-view hidden" role="tabpanel" aria-labelledby="btn-cards"></div>
-      <div class="controls-row hidden" id="cardsPager" style="margin:.5rem 1rem;justify-content:center"><button id="cardsPrev" class="view-btn">Anterior</button><span id="cardsPage" class="stat-label" style="min-width:80px;text-align:center"></span><button id="cardsNext" class="view-btn">Siguiente</button></div>
+      <div
+        id="cardsView"
+        class="cards-view hidden"
+        role="tabpanel"
+        aria-labelledby="btn-cards"
+      ></div>
+      <div
+        class="controls-row hidden"
+        id="cardsPager"
+        style="margin: 0.5rem 1rem; justify-content: center"
+      >
+        <button id="cardsPrev" class="view-btn">Anterior</button
+        ><span id="cardsPage" class="stat-label" style="min-width: 80px; text-align: center"></span
+        ><button id="cardsNext" class="view-btn">Siguiente</button>
+      </div>
     </div>
 
     <div class="tooltip" id="tooltip" role="dialog" aria-live="polite" aria-hidden="true"></div>

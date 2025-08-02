@@ -20,7 +20,8 @@ vercel.json
 ```
 
 Scripts:
-- npm run dev  # local dev server
+
+- npm run dev # local dev server
 - npm run build # static build to dist
 - npm run preview # preview the built site
 

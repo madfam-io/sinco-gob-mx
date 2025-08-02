@@ -4,9 +4,11 @@ Date: 2025-08-02
 Repository: sinco-gob-mx
 
 ## Summary
+
 Overall, the project is a static SPA served from /public with vanilla JS + D3. It recently adopted Vite for local tooling but deploys static assets. Security posture improved with CSP. Primary risks: lack of automated tests, no lint/format enforcement in CI for HTML/inline scripts, runtime-only validation of data, missing accessibility and performance budgets, and minimal error reporting/observability.
 
 ## Architecture & Build
+
 - Runtime: Static site (index.html, sincoData.json, app.js). No framework runtime.
 - Tooling: Vite present for dev/build. Rollup input set to public/index.html.
 - Bundle: D3 via CDN; app.js unbundled. No tree-shaking on D3 because CDN.
@@ -15,6 +17,7 @@ Overall, the project is a static SPA served from /public with vanilla JS + D3. I
   - Generate dist/ with hashed filenames; keep vercel.json routing.
 
 ## Security
+
 - CSP: meta tag enforces script-src 'self' cdnjs; style-src allows 'unsafe-inline'; connect-src 'self'. Good start.
   - Risk: inline style allowance; consider extracting critical inline styles or adding a style hash.
   - Add object-src 'none'; base-uri 'self'; frame-ancestors 'none' (or desired domains).
@@ -26,6 +29,7 @@ Overall, the project is a static SPA served from /public with vanilla JS + D3. I
   - Validate JSON against schema at build/CI (schema/sinco.schema.json already present).
 
 ## Data Integrity
+
 - Schema present for sincoData.json.
 - scripts/validate-data.mjs presumably validates; ensure it’s run in CI.
 - App computes totals from hierarchy leaves (robust).
@@ -34,6 +38,7 @@ Overall, the project is a static SPA served from /public with vanilla JS + D3. I
   - Add data freshness/version fields and surface last-updated in UI.
 
 ## Performance
+
 - D3 renders a collapsible tree; zoom enabled.
 - render costs: updateTree performs transitions for all nodes; OK for moderate data sizes.
 - Search: linear scan over allNodes; acceptable. Debounced.
@@ -45,6 +50,7 @@ Overall, the project is a static SPA served from /public with vanilla JS + D3. I
   - Add lazy i18n loading per language only.
 
 ## Accessibility (a11y)
+
 - ARIA roles for banner, main, tablist, tabpanel; good.
 - Tooltip uses aria-live and aria-hidden toggling.
 - Needs:
@@ -55,11 +61,13 @@ Overall, the project is a static SPA served from /public with vanilla JS + D3. I
   - Add labels for new pagination and expand/collapse controls.
 
 ## Internationalization (i18n)
+
 - i18n resources exist (en/es) and runtime loader.
 - Ensure new UI strings (Expandir/Colapsar, Anterior/Siguiente) are added to i18n files.
 - Add lang switch persistence (localStorage).
 
 ## Code Quality
+
 - Code is modular within an IIFE, follows ES6, debounced events, minimal globals; good.
 - Missing linting for JS/HTML in CI.
 - Recommendations:
@@ -67,26 +75,31 @@ Overall, the project is a static SPA served from /public with vanilla JS + D3. I
   - Type hints via JSDoc for complex objects (state, nodes) to aid tooling.
 
 ## Testing
+
 - tests/e2e.spec.ts exists (Playwright), but no test runner configured in CRUSH.md originally. CI includes Playwright? Check .github/workflows/ci.yml.
 - Recommendations:
   - Add Playwright CI job to launch static server and run e2e.
   - Add a few unit tests for data processing with Vitest (if bundling) or simple Node tests for helpers.
 
 ## CI/CD
+
 - ci.yml present; ensure it runs: schema validation, lint, build, e2e, and deploy previews.
 - Recommendations:
   - Add job caching for node_modules if used.
   - Fail build on CSP regressions using csp-evaluator in CI.
 
 ## Observability
+
 - No analytics, no error reporting.
 - Recommendation: Add basic error boundary display (already shows loader error). Optionally add Sentry/lightweight logging (opt-in, privacy-aware).
 
 ## Documentation
+
 - README exists. Should include local dev, test, build, deploy, CSP notes, data schema, and i18n process.
 - Add HEALTH.md to track ongoing quality tasks.
 
 ## Actionable Checklist
+
 - Security
   - [ ] Add object-src 'none', base-uri 'self', frame-ancestors policy to CSP
   - [ ] Add SRI to D3 CDN
@@ -110,19 +123,22 @@ Overall, the project is a static SPA served from /public with vanilla JS + D3. I
   - [ ] Document i18n workflow and adding new strings
 
 ## Notable Files Reviewed
+
 - public/index.html: main markup, styles, CSP, D3 include
 - public/app.js: app logic (tree/table/cards/search/pagination/a11y basics)
-- public/i18n/*: translations
+- public/i18n/\*: translations
 - schema/sinco.schema.json: data schema
 - scripts/validate-data.mjs: data validation utility
 - .github/workflows/ci.yml: CI setup
 - vercel.json: deploy config and routes
 
 ## Risks
+
 - CDN reliance for D3 without SRI
 - No automated regression tests for UI interactions beyond single e2e
 - Accessibility gaps may affect keyboard/screen reader users
 - CSP relies on meta; headers preferable in production
 
 ## Conclusion
+
 Health is fair with recent functional and security improvements. Prioritize CI-backed data validation, lint/tests, CSP hardening, and a11y/pagination i18n to reach a solid baseline.
