@@ -4,10 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="appTitle">SINCO 2019 - Sistema Nacional de Clasificación de Ocupaciones</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' https://cdnjs.cloudflare.com; connect-src 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';" />
 
-    <!-- D3.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,7 +16,7 @@
     />
 
     <!-- Internal Stylesheet -->
-    <style>
+    <link rel="stylesheet" href="/src/style.css">
       :root {
         --bg-primary: #0f0f1f;
         --bg-secondary: #1a1a2e;
@@ -556,7 +554,7 @@
       <div class="loader-circle"></div>
     </div>
 
-    <script src="/app.js" defer></script>
-    <script src="/i18n/i18n.js"></script>
+    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/i18n/i18n.js"></script>
   </body>
 </html>
