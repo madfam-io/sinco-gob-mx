@@ -1,0 +1,2 @@
+#!/bin/sh
+npm run lhci:precommit || true
