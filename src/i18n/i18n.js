@@ -1,8 +1,5 @@
 (function () {
-  const RESOURCES = {
-    es: "/i18n/es.json",
-    en: "/i18n/en.json",
-  };
+  const RESOURCES = { es: "/i18n/es.json", en: "/i18n/en.json" };
   const LS_KEY = "sinco-lang";
   async function load(lang) {
     const res = await fetch(RESOURCES[lang] || RESOURCES.es);
