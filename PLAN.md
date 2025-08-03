@@ -53,6 +53,52 @@ Deliver a talent intelligence platform for HR to benchmark occupations, design r
 - 31–60d (M2): skills taxonomy integration, locality indices, forecasting v1, SSO, audit logs
 - 61–90d (M3): peer-group analytics, internal mobility insights, public/private benchmarks, API for HRIS/ATS
 
+## Neobrutalism UI Plan
+
+Goals
+
+- Bold, high-contrast, functional aesthetics with accessible color contrast
+- Reduced shadows/gradients; heavy borders, solid fills, chunky controls
+- Maintain performance and a11y (focus states, touch targets)
+
+Design tokens
+
+- Colors: bg:#fff, text:#111, primary:#111, accent:#00D4FF, border:#111, muted:#f2f2f2, danger:#ff3366, success:#00cc66
+- Radius: 0px (square), with rare 4px exceptions
+- Border: 2–3px solid #111; focus: 3px outline offset
+- Spacing scale: 4,8,12,16,24
+- Typography: Inter or system UI; headings bold 800; base 16px; letter-spacing tight
+
+Components to update
+
+- Header: solid bar, thick bottom border
+- Tabs: pill -> square buttons with 2px border; clear active state; focus rings
+- Cards: solid background (muted), 2–3px border, no gradients; shadow only on active
+- Buttons: square, 2px border, solid fills; hover invert; disabled dim
+- Table: header/footer borders 2px; rows zebra-muted; compact padding
+- Tree nodes: circles -> squares; thicker link strokes
+- Badges: solid fills, uppercase, letter-spacing
+- Tooltip: solid border, no blur; pointer triangle optional
+
+Implementation steps
+
+1) Add CSS tokens and neobrutal class names; keep old vars for fallback
+2) Replace gradients/shadows with solid fills and borders
+3) Update tree node styles and link stroke widths
+4) Tighten focus states and keyboard outlines
+5) Add reduced-motion support
+6) Verify a11y and color-contrast (axe, Lighthouse)
+
+Rollout
+
+- Feature flag via body class .theme-neo; default off, toggle in header
+- QA on mobile/desktop; collect feedback; then make default
+
+Risks
+
+- Contrast fatigue; mitigate with spacing and muted grays
+- D3 layout readability with thicker strokes; test on dense trees
+
 ## Technical Roadmap
 
 - Frontend: continue static SPA; progressively enhance with modules; keyboard/a11y-first; mobile responsive
