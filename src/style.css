@@ -18,6 +18,21 @@
   --warning-gradient: linear-gradient(135deg, #ffaa00, #ff8800);
   --danger-gradient: linear-gradient(135deg, #ff4466, #ff2244);
 }
+/* Neobrutal theme tokens */
+.theme-neo {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f7;
+  --bg-tertiary: #f2f2f2;
+  --bg-interactive: #f2f2f2;
+  --text-primary: #111111;
+  --text-secondary: #333333;
+  --accent-primary: #111111;
+  --accent-secondary: #00d4ff;
+  --accent-gradient: none;
+  --shadow-color-light: transparent;
+  --shadow-color-dark: transparent;
+  --border-color: #111111;
+}
 *,
 *::before,
 *::after {
@@ -36,22 +51,17 @@ body {
   display: none !important;
 }
 .header {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  background: var(--bg-secondary);
   padding: 1rem;
-  box-shadow: 0 4px 20px var(--shadow-color-dark);
+  border-bottom: 3px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 .header h1 {
   font-size: 1.5rem;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
+  color: var(--text-primary);
   margin-bottom: 1rem;
-  animation: glow 2s ease-in-out infinite alternate;
   text-align: center;
 }
 @keyframes glow {
@@ -133,27 +143,30 @@ body {
 .view-toggle {
   display: flex;
   gap: 0.25rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   padding: 0.25rem;
-  border-radius: 20px;
 }
 .view-btn {
-  padding: 0.75rem 1rem;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
+  padding: 0.5rem 0.75rem;
+  background: #fff0;
+  border: 3px solid var(--border-color);
+  color: var(--text-primary);
   cursor: pointer;
-  border-radius: 15px;
-  transition: all 0.3s ease;
+  border-radius: 0;
+  transition: background-color 0.15s ease;
   font-size: 0.95rem;
   white-space: nowrap;
   min-height: 44px;
   min-width: 44px;
 }
 .view-btn.active {
-  background: var(--accent-gradient);
-  color: #fff;
-  box-shadow: 0 4px 15px var(--shadow-color-light);
+  background: var(--accent-secondary);
+  border-color: var(--text-primary);
+  color: #000;
+}
+.view-btn:focus-visible {
+  outline: 3px solid var(--text-primary);
+  outline-offset: 2px;
 }
 .content {
   height: calc(100vh - 210px);
@@ -172,8 +185,8 @@ body {
 .node circle {
   fill: var(--bg-tertiary);
   stroke: var(--accent-primary);
-  stroke-width: 2px;
-  transition: all 0.3s ease;
+  stroke-width: 3px;
+  transition: none;
 }
 .node:hover circle,
 .node.highlight circle {
@@ -268,17 +281,15 @@ tr:hover {
   }
 }
 .division-card {
-  background: linear-gradient(135deg, var(--bg-interactive), rgba(16, 33, 62, 0.3));
-  border: 2px solid var(--border-color);
-  border-radius: 15px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  background: var(--bg-tertiary);
+  border: 3px solid var(--border-color);
+  border-radius: 0;
+  padding: 1rem;
+  transition: background-color 0.15s ease;
   cursor: pointer;
 }
 .division-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--accent-primary);
-  box-shadow: 0 4px 30px var(--shadow-color-light);
+  background: var(--bg-secondary);
 }
 .division-header {
   display: flex;
@@ -293,11 +304,13 @@ tr:hover {
   color: var(--accent-primary);
 }
 .occupation-count {
-  background: rgba(0, 212, 255, 0.2);
-  padding: 0.25rem 0.75rem;
-  border-radius: 15px;
+  background: var(--muted, #eaeaea);
+  padding: 0.25rem 0.5rem;
+  border: 3px solid var(--border-color);
+  border-radius: 0;
   font-size: 0.85rem;
   white-space: nowrap;
+  color: var(--text-primary);
 }
 .tooltip {
   position: fixed;

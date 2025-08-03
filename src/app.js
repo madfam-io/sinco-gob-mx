@@ -105,6 +105,14 @@ import * as d3 from "d3";
     if (collapseBtn) collapseBtn.addEventListener("click", collapseAll);
     const resetZoomBtn = document.getElementById("btn-reset-zoom");
     if (resetZoomBtn) resetZoomBtn.addEventListener("click", resetZoom);
+    const neoBtn = document.getElementById("btn-theme-neo");
+    if (neoBtn) {
+      neoBtn.addEventListener("click", () => {
+        document.body.classList.toggle("theme-neo");
+        const pressed = document.body.classList.contains("theme-neo");
+        neoBtn.setAttribute("aria-pressed", pressed ? "true" : "false");
+      });
+    }
   }
   function processData() {
     state.allNodes = state.rootNode.descendants();
@@ -391,7 +399,8 @@ import * as d3 from "d3";
       card.className = "division-card";
       card.dataset.code = division.data.code;
       const code = division.data.code;
-      const count = state.divisionLeafCounts?.get(code) ?? state.leafCountByDivision?.get(code) ?? 0;
+      const count =
+        state.divisionLeafCounts?.get(code) ?? state.leafCountByDivision?.get(code) ?? 0;
       const totalEmployees = state.divisionEmployeeTotals?.get(code) ?? 0;
       card.innerHTML = `
               <div class="division-header">
