@@ -82,12 +82,12 @@ Components to update
 
 Implementation steps
 
-1) Add CSS tokens and neobrutal class names; keep old vars for fallback
-2) Replace gradients/shadows with solid fills and borders
-3) Update tree node styles and link stroke widths
-4) Tighten focus states and keyboard outlines
-5) Add reduced-motion support
-6) Verify a11y and color-contrast (axe, Lighthouse)
+1. Add CSS tokens and neobrutal class names; keep old vars for fallback
+2. Replace gradients/shadows with solid fills and borders
+3. Update tree node styles and link stroke widths
+4. Tighten focus states and keyboard outlines
+5. Add reduced-motion support
+6. Verify a11y and color-contrast (axe, Lighthouse)
 
 Rollout
 
