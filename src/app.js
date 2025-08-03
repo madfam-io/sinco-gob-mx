@@ -105,6 +105,12 @@ import * as d3 from "d3";
     if (collapseBtn) collapseBtn.addEventListener("click", collapseAll);
     const resetZoomBtn = document.getElementById("btn-reset-zoom");
     if (resetZoomBtn) resetZoomBtn.addEventListener("click", resetZoom);
+    const neoBtn = document.getElementById("btn-theme-neo");
+    if (neoBtn) neoBtn.addEventListener("click", () => {
+      document.body.classList.toggle("theme-neo");
+      const pressed = document.body.classList.contains("theme-neo");
+      neoBtn.setAttribute("aria-pressed", pressed ? "true" : "false");
+    });
   }
   function processData() {
     state.allNodes = state.rootNode.descendants();
